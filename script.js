@@ -24,6 +24,7 @@ var ht;
 var stage;
 var loader;
 
+document.onkeydown = handleKeyDown;
 
 function Cat(x, y, container) {
   
@@ -70,6 +71,31 @@ function Cat(x, y, container) {
   head.x = -8;
   head.y = -2;
 
+  var counter = 0;
+  this.update = function() {
+    
+    if (Math.floor(counter/4) % 2 == 0) {
+      tail.x = 22;
+    } else {
+      tail.x = 21;
+    }
+
+    if (counter < 8) {
+      legs1.y = 16 - counter/3;
+      legs2.y = 16 - 8/3 + counter/3;
+    } else if (counter < 16) {
+      c2 = counter - 8;
+      legs1.y = 16 - 8/3 + c2/3;
+      legs2.y = 16 - c2/3;
+    } else {
+      counter = -1;
+    }
+
+    counter += 1;
+    
+    stage.update();
+  }
+
   return this;
 }
 
@@ -104,3 +130,9 @@ function handleComplete() {
   stage.update();
 }
 
+function handleKeyDown(e) {
+  if (!e) { var e = window.event; } 
+
+  cat.update();
+  return false;
+}
