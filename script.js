@@ -60,10 +60,14 @@ function Level(container) {
   this.getMask = function(x,y) {
     var test_x = x / mask_scaleX;
     var test_y = y / mask_scaleY;
+    if (test_x < 0) return 0;
+    if (test_y < 0) return 0;
+    if (test_x >= lwd2) return 0;
+    if (test_y >= lht2) return 0;
 
     console.log("get mask " + test_x + " " + test_y);
     var data = mask.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
-    return data;
+    return data[0];
   }
 
   return this;
@@ -77,6 +81,7 @@ function Cat(x, y, container) {
   cont.scaleX = 4;
   cont.scaleY = cont.scaleX;
   cont.regX = 16;
+  cont.regY = 16;
   container.addChild(cont);
 
   var legs1 = new createjs.Container();
@@ -146,7 +151,7 @@ function Cat(x, y, container) {
 
   this.testMove = function(dx, dy) {
     var pix = level.getMask(cont.x + dx, cont.y + dy);
-    return (pix[0] > 128);
+    return (pix > 128);
   }
   this.move = function(dx, dy) {
     if (dx > 0) cont.scaleX = -Math.abs(cont.scaleX);
