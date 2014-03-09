@@ -34,7 +34,18 @@ var KEYCODE_RIGHT = 39;
 document.onkeydown = handleKeyDown;
 
 function Level(container) {
+   
+  var mask_asset =  loader.getResult("level_mask");
+  var mask = new createjs.Bitmap(mask_asset);
+  var lwd2 = mask.getBounds().width;
+  var lht2 = mask.getBounds().height;
+  var mask_scaleX = wd/lwd2;
+  var mask_scaleY = ht/lht2;
+  console.log("mask_scaleX " + mask_scaleX + ", Y " + mask_scaleY + " " + lwd2 + " " + lht2);
+  mask.cache(0,0,lwd2,lht2);
+  container.addChild(mask);
   
+
   var lev_asset =  loader.getResult("level");
   var lev = new createjs.Bitmap(lev_asset);
   
@@ -43,18 +54,16 @@ function Level(container) {
   lev.scaleX = wd/lwd;
   lev.scaleY = ht/lht;
   container.addChild(lev);
-
-  var mask_asset =  loader.getResult("level_mask");
-  var mask = new createjs.Bitmap(lev_asset);
-  mask.cache(0,0,lwd,lht);
-  mask.crossOrigin = '';
-  mask.src = 'http://other-domain.com/image.jpg';
-
+  
   stage.update();
 
   this.getMask = function(x,y) {
-    var data = mask.cacheCanvas.getContext("2d").getImageData(0,0,lwd,lht).data; 
-    return data[(y * lwd + x) * 4];
+    var test_x = x / mask_scaleX;
+    var test_y = y / mask_scaleY;
+
+    console.log("get mask " + test_x + " " + test_y);
+    var data = mask.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
+    return data;
   }
 
   return this;
@@ -131,18 +140,41 @@ function Cat(x, y, container) {
     
     stage.update();
   }
-  
-  this.move = function(x, y) {
-    if (x > 0) cont.scaleX = -Math.abs(cont.scaleX);
-    else if (x < 0) cont.scaleX = Math.abs(cont.scaleX);
-    var new_x = cont.x + x * Math.abs(cont.scaleX); 
-    var new_y = cont.y + y * Math.abs(cont.scaleX); 
+ 
+  var last_dx = 0;
+  var last_dy = 0;
 
-    var pix = level.getMask(new_x, new_y);
-    console.log("pix " + pix);
-    if (pix > 128) {
-      cont.x = new_x;
-      cont.y = new_y;
+  this.testMove = function(dx, dy) {
+    var pix = level.getMask(cont.x + dx, cont.y + dy);
+    return (pix[0] > 128);
+  }
+  this.move = function(dx, dy) {
+    if (dx > 0) cont.scaleX = -Math.abs(cont.scaleX);
+    else if (dx < 0) cont.scaleX = Math.abs(cont.scaleX);
+    
+    //console.log("dxy " + dx + " " + dy); 
+    var did_move = true;
+    if (this.testMove(dx, dy)) {
+      
+    } else if ((dx !== 0) && (last_dy !== 0) && this.testMove(0, last_dy)) {
+      dx = 0;
+      dy = last_dy;
+      //console.log("y dxy " + dx + " " + dy); 
+    } else if ((dy !== 0) && (last_dx !== 0) && this.testMove(last_dx, 0)) {
+      dx = last_dx;
+      dy = 0;
+      //console.log("x dxy " + dx + " " + dy); 
+    } else {
+      did_move = false;
+    }
+
+    //console.log("pix " + new_x + " " + new_y + " " + pix[0]);
+
+    if (did_move) {
+      cont.x += dx;
+      cont.y += dy;
+      if (dx !== 0) last_dx = dx;
+      if (dy !== 0) last_dy = dy;
       return true;
     }
     
