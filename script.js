@@ -24,6 +24,12 @@ var ht;
 var stage;
 var loader;
 
+var KEYCODE_UP = 38;
+var KEYCODE_DOWN = 40;
+var KEYCODE_LEFT = 37;
+var KEYCODE_RIGHT = 39;
+
+
 document.onkeydown = handleKeyDown;
 
 function Cat(x, y, container) {
@@ -71,6 +77,7 @@ function Cat(x, y, container) {
   head.x = -8;
   head.y = -2;
 
+
   var counter = 0;
   this.update = function() {
     
@@ -94,6 +101,13 @@ function Cat(x, y, container) {
     counter += 1;
     
     stage.update();
+  }
+  
+  this.move = function(x, y) {
+    //if (x < 0) cont.scaleX = -Math.abs(cont.scaleX);
+    cont.x += x * Math.abs(cont.scaleX); 
+    cont.y += y * Math.abs(cont.scaleX); 
+    console.log(cont.x + " " + cont.y);
   }
 
   return this;
@@ -133,6 +147,28 @@ function handleComplete() {
 function handleKeyDown(e) {
   if (!e) { var e = window.event; } 
 
-  cat.update();
-  return false;
+  var update = true;
+  switch (e.keyCode) {
+    case KEYCODE_LEFT:
+      cat.move(-1, 0);
+      break;
+    case KEYCODE_RIGHT:
+      cat.move( 1, 0);
+      break;
+    case KEYCODE_UP:
+      cat.move( 0, -1);
+      break;
+    case KEYCODE_DOWN:
+      cat.move( 0,  1);
+      break;
+    default:
+      update = false;
+      break;
+  }
+
+  if (update) {
+    cat.update();
+    return false;
+  }
+
 }
