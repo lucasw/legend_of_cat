@@ -18,6 +18,7 @@
  
  */
 
+var level;
 var cat;
 var wd;
 var ht;
@@ -32,13 +33,41 @@ var KEYCODE_RIGHT = 39;
 
 document.onkeydown = handleKeyDown;
 
+function Level(container) {
+  
+  var lev_asset =  loader.getResult("level");
+  var lev = new createjs.Bitmap(lev_asset);
+  
+  var lwd = lev.getBounds().width;
+  var lht = lev.getBounds().height;
+  lev.scaleX = wd/lwd;
+  lev.scaleY = ht/lht;
+  container.addChild(lev);
+
+  var mask_asset =  loader.getResult("level_mask");
+  var mask = new createjs.Bitmap(lev_asset);
+  mask.cache(0,0,lwd,lht);
+  mask.crossOrigin = '';
+  mask.src = 'http://other-domain.com/image.jpg';
+
+  stage.update();
+
+  this.getMask = function(x,y) {
+    var data = mask.cacheCanvas.getContext("2d").getImageData(0,0,lwd,lht).data; 
+    return data[(y * lwd + x) * 4];
+  }
+
+  return this;
+}
+
 function Cat(x, y, container) {
   
   var cont = new createjs.Container();
   cont.x = x;
   cont.y = y;
-  cont.scaleX = 8;
+  cont.scaleX = 4;
   cont.scaleY = cont.scaleX;
+  cont.regX = 16;
   container.addChild(cont);
 
   var legs1 = new createjs.Container();
@@ -104,10 +133,20 @@ function Cat(x, y, container) {
   }
   
   this.move = function(x, y) {
-    //if (x < 0) cont.scaleX = -Math.abs(cont.scaleX);
-    cont.x += x * Math.abs(cont.scaleX); 
-    cont.y += y * Math.abs(cont.scaleX); 
-    console.log(cont.x + " " + cont.y);
+    if (x > 0) cont.scaleX = -Math.abs(cont.scaleX);
+    else if (x < 0) cont.scaleX = Math.abs(cont.scaleX);
+    var new_x = cont.x + x * Math.abs(cont.scaleX); 
+    var new_y = cont.y + y * Math.abs(cont.scaleX); 
+
+    var pix = level.getMask(new_x, new_y);
+    console.log("pix " + pix);
+    if (pix > 128) {
+      cont.x = new_x;
+      cont.y = new_y;
+      return true;
+    }
+    
+    return false;
   }
 
   return this;
@@ -127,6 +166,8 @@ function init() {
 
   // TODO have a Cat.addManifest that populates this
   manifest = [
+    {src:"assets/level_test_dither.png", id:"level"},
+    {src:"assets/level_test_mask.png", id:"level_mask"},
     {src:"assets/cat_body.png", id:"cat_body"},
     {src:"assets/cat_head.png", id:"cat_head"},
     {src:"assets/cat_leg.png", id:"cat_leg"}
@@ -138,9 +179,10 @@ function init() {
 
 }
 
-function handleComplete() {
-  cat = new Cat(wd/2, ht/2, stage); 
 
+function handleComplete() {
+  level = new Level(stage);
+  cat = new Cat(wd/2, 3*ht/4, stage); 
   stage.update();
 }
 
@@ -148,18 +190,20 @@ function handleKeyDown(e) {
   if (!e) { var e = window.event; } 
 
   var update = true;
+  var dx = 0; 
+  var dy = 0;
   switch (e.keyCode) {
     case KEYCODE_LEFT:
-      cat.move(-1, 0);
+      dx = -1;
       break;
     case KEYCODE_RIGHT:
-      cat.move( 1, 0);
+      dx = 1;
       break;
     case KEYCODE_UP:
-      cat.move( 0, -1);
+      dy = -1;
       break;
     case KEYCODE_DOWN:
-      cat.move( 0,  1);
+      dy = 1;
       break;
     default:
       update = false;
@@ -167,7 +211,8 @@ function handleKeyDown(e) {
   }
 
   if (update) {
-    cat.update();
+    if (cat.move(dx, dy))
+      cat.update();
     return false;
   }
 
