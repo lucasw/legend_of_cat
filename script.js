@@ -41,7 +41,7 @@ function Level(container) {
   var lht2 = mask.getBounds().height;
   var mask_scaleX = wd/lwd2;
   var mask_scaleY = ht/lht2;
-  console.log("mask_scaleX " + mask_scaleX + ", Y " + mask_scaleY + " " + lwd2 + " " + lht2);
+  //console.log("mask_scaleX " + mask_scaleX + ", Y " + mask_scaleY + " " + lwd2 + " " + lht2);
   mask.cache(0,0,lwd2,lht2);
   container.addChild(mask);
   
@@ -124,6 +124,11 @@ function Cat(x, y, container) {
   var counter = 0;
   this.update = function() {
     
+    if (counter > 8) {
+      head.y = -2;
+    } else {
+      head.y = -3;
+    }
     if (Math.floor(counter/4) % 2 == 0) {
       tail.x = 22;
     } else {
@@ -203,11 +208,15 @@ function init() {
 
   // TODO have a Cat.addManifest that populates this
   manifest = [
-    {src:"assets/level_test_dither.png", id:"level"},
-    {src:"assets/level_test_mask.png", id:"level_mask"},
+    //{src:"assets/level_test_dither.png", id:"level"},
+    //{src:"assets/level_test_mask.png", id:"level_mask"},
+    {src:"assets/castle_door_dither.png", id:"level"},
+    {src:"assets/castle_door_mask.png", id:"level_mask"},
     {src:"assets/cat_body.png", id:"cat_body"},
     {src:"assets/cat_head.png", id:"cat_head"},
-    {src:"assets/cat_leg.png", id:"cat_leg"}
+    {src:"assets/cat_leg.png", id:"cat_leg"},
+    {src:"grant.json", id:"map_data"}
+    //{src:"assets/map.json", id:"map_data"}
   ];
 
   loader = new createjs.LoadQueue(false);
@@ -221,6 +230,9 @@ function handleComplete() {
   level = new Level(stage);
   cat = new Cat(wd/2, 3*ht/4, stage); 
   stage.update();
+
+  console.log((loader.getResult("map_data", true)));
+  //console.log(JSON.parse(loader.getResult("map_data")));
 }
 
 function handleKeyDown(e) {

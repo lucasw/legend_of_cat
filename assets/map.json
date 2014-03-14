@@ -1,0 +1,6 @@
+{
+  [
+    {"image": "level_test_dither.png", "mask": "level_test_mask.png"},
+    {"image": "castle_door_dither.png", "mask": "castle_door_mask.png"}
+  ]
+}
