@@ -70,7 +70,7 @@ function Level(container, image, mask) {
     if (test_x >= lwd2) return 0;
     if (test_y >= lht2) return 0;
 
-    console.log("get mask " + test_x + " " + test_y);
+    //console.log("get mask " + test_x + " " + test_y);
     var data = mask.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
     return data[0];
   }
@@ -128,7 +128,8 @@ function Cat(x, y, container) {
 
   var counter = 0;
   this.update = function() {
-    
+  
+  if (did_move) {
     if (counter > 8) {
       head.y = -2;
     } else {
@@ -152,7 +153,8 @@ function Cat(x, y, container) {
     }
 
     counter += 1;
-    
+  }
+
     stage.update();
   }
  
@@ -163,13 +165,17 @@ function Cat(x, y, container) {
     var pix = level.getMask(cont.x + dx, cont.y + dy);
     return (pix > 128);
   }
+
+  var did_move = false;
   this.move = function(dx, dy) {
     if (dx > 0) cont.scaleX = -Math.abs(cont.scaleX);
     else if (dx < 0) cont.scaleX = Math.abs(cont.scaleX);
     
     //console.log("dxy " + dx + " " + dy); 
-    var did_move = true;
-    if (this.testMove(dx, dy)) {
+    did_move = true;
+    if ((dx === 0) && (dy === 0)) {
+      did_move = false;
+    } else if (this.testMove(dx, dy)) {
       
     } else if ((dx !== 0) && (last_dy !== 0) && this.testMove(0, last_dy)) {
       dx = 0;
@@ -182,8 +188,9 @@ function Cat(x, y, container) {
     } else {
       did_move = false;
     }
-
-    //console.log("pix " + new_x + " " + new_y + " " + pix[0]);
+    
+    //console.log(did_move + " " + dx + " " + last_dx);
+    // console.log("pix " + new_x + " " + new_y + " " + pix[0]);
 
     if (did_move) {
       cont.x += dx;
@@ -261,11 +268,12 @@ var key_down = false;
 function update() {
   var dx = 0; 
   var dy = 0;
-    
-  if (key_left) dx -= 1;
-  if (key_right) dx += 1;
-  if (key_up) dy -= 1;
-  if (key_down) dy += 1;
+  
+  var dval = 3;
+  if (key_left) dx -= dval;
+  if (key_right) dx += dval;
+  if (key_up) dy -= dval;
+  if (key_down) dy += dval;
 
     if (cat.move(dx, dy))
       cat.update();
@@ -285,8 +293,12 @@ function handleKey(e, val) {
   var update = true;
 
   // not working yet
-  var key = String.fromCharCode( e.keyCode ).charCodeAt(0);
-  if (key == 'a')  key_left = val; 
+  var key = e.keyCode; //String.fromCharCode( e.keyCode ).charCodeAt(0);
+  if (key == 'A'.charCodeAt(0))  key_left = val; 
+  if (key == 'D'.charCodeAt(0))  key_right = val; 
+  if (key == 'W'.charCodeAt(0))  key_up = val; 
+  if (key == 'S'.charCodeAt(0))  key_down = val; 
+  //console.log(key + " " + e.keyCode + " " + 'A'.charCodeAt(0));
 
   switch (e.keyCode) {
     case KEYCODE_LEFT:
