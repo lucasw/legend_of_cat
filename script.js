@@ -38,10 +38,21 @@ var KEYCODE_RIGHT = 39;
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
-function Level(image, mask) {
+function Level(image_id, mask_id, exits_id) {
    
   this.container = new createjs.Container();
-  var mask_asset =  map_loader.getResult(mask);
+  
+  var exits_asset =  map_loader.getResult(exits_id);
+  var exits = new createjs.Bitmap(exits_asset);
+  var lwd2e = exits.getBounds().width;
+  var lht2e = exits.getBounds().height;
+  var exits_scaleX = wd/lwd2e;
+  var exits_scaleY = ht/lht2e;
+  //console.log("exits_scaleX " + exits_scaleX + ", Y " + exits_scaleY + " " + lwd2 + " " + lht2);
+  exits.cache(0,0,lwd2e,lht2e);
+  this.container.addChild(exits);
+  
+  var mask_asset =  map_loader.getResult(mask_id);
   var mask = new createjs.Bitmap(mask_asset);
   var lwd2 = mask.getBounds().width;
   var lht2 = mask.getBounds().height;
@@ -50,9 +61,8 @@ function Level(image, mask) {
   //console.log("mask_scaleX " + mask_scaleX + ", Y " + mask_scaleY + " " + lwd2 + " " + lht2);
   mask.cache(0,0,lwd2,lht2);
   this.container.addChild(mask);
-  
 
-  var lev_asset =  map_loader.getResult(image);
+  var lev_asset =  map_loader.getResult(image_id);
   var lev = new createjs.Bitmap(lev_asset);
   
   var lwd = lev.getBounds().width;
@@ -63,7 +73,8 @@ function Level(image, mask) {
   
   //stage.update();
 
-  this.getMask = function(x,y) {
+  var getPixel = function(bitmap, x,y) {
+    // TODO replace mask_scaleX/Y with something stored in bitmap
     var test_x = x / mask_scaleX;
     var test_y = y / mask_scaleY;
     if (test_x < 0) return 0;
@@ -72,8 +83,21 @@ function Level(image, mask) {
     if (test_y >= lht2) return 0;
 
     //console.log("get mask " + test_x + " " + test_y);
-    var data = mask.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
+    var data = bitmap.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
     return data[0];
+  }
+
+  this.getMask = function(x,y) {
+    return getPixel(mask, x, y);
+  }
+
+  this.getExit = function(x,y) {
+    return getPixel(exits, x, y);
+  }
+
+  this.doExit = function(player_container) {
+    // see if the pixel value of the current exit position matches the value of an exit
+    // then update the stage and player_container position to move to the new level
   }
 
   return this;
@@ -198,10 +222,12 @@ function Cat(x, y, container) {
       cont.y += dy;
       if (dx !== 0) last_dx = dx;
       if (dy !== 0) last_dy = dy;
-      return true;
     }
-    
-    return false;
+   
+    // if the player is standing on an exit pixel, move them to the new level
+    level.doExit(cont)
+
+    return did_move;
   }
 
   return this;
@@ -248,7 +274,11 @@ function handleComplete() {
 function mapHandleComplete() {
   // create all the levels
   for (var i = 0; i < map_data.levels.length; i++) {
-    var new_level = new Level(map_data.levels[i].image, map_data.levels[i].mask);
+    var new_level = new Level(
+        map_data.levels[i].image, 
+        map_data.levels[i].mask,
+        map_data.levels[i].exits
+        );
     levels.push(new_level);
   }
 

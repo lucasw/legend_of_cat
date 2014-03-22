@@ -2,20 +2,24 @@
   "manifest": [
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
-    {"src": "assets/level_test_mask.png",    "id":"level_test_exits"},
+    {"src": "assets/level_test_exits.png",    "id":"level_test_exits"},
     {"src": "assets/castle_door_dither.png", "id":"castle_door"},
-    {"src": "assets/castle_door_mask.png",   "id":"castle_door_mask"}
+    {"src": "assets/castle_door_mask.png",   "id":"castle_door_mask"},
     {"src": "assets/castle_door_exits.png",   "id":"castle_door_exits"}
   ],
   "levels": [
-    {"image": "level_test",  "mask": "level_test_mask", "exits": "level_test_exits",
+    { "image": "level_test",  
+      "mask": "level_test_mask", 
+      "exits": "level_test_exits",
       "connections": [
-        {"value": "102", "level":"castle_door"}
+        {"value": "102", "level":"castle_door", "x":"160", "y":"160"}
       ]
     },
-    {"image": "castle_door", "mask": "castle_door_mask", "exits": "castle_door_exits",
+    { "image": "castle_door", 
+      "mask": "castle_door_mask", 
+      "exits": "castle_door_exits",
       "connections": [
-        {"value": "202", "level":"level_test"}
+        {"value": "202", "level":"level_test", "x":"194", "y":"117"}
       ]
     }
   ]
