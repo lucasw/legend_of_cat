@@ -38,8 +38,9 @@ var KEYCODE_RIGHT = 39;
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
-function Level(container, image, mask) {
+function Level(image, mask) {
    
+  this.container = new createjs.Container();
   var mask_asset =  map_loader.getResult(mask);
   var mask = new createjs.Bitmap(mask_asset);
   var lwd2 = mask.getBounds().width;
@@ -48,7 +49,7 @@ function Level(container, image, mask) {
   var mask_scaleY = ht/lht2;
   //console.log("mask_scaleX " + mask_scaleX + ", Y " + mask_scaleY + " " + lwd2 + " " + lht2);
   mask.cache(0,0,lwd2,lht2);
-  container.addChild(mask);
+  this.container.addChild(mask);
   
 
   var lev_asset =  map_loader.getResult(image);
@@ -58,9 +59,9 @@ function Level(container, image, mask) {
   var lht = lev.getBounds().height;
   lev.scaleX = wd/lwd;
   lev.scaleY = ht/lht;
-  container.addChild(lev);
+  this.container.addChild(lev);
   
-  stage.update();
+  //stage.update();
 
   this.getMask = function(x,y) {
     var test_x = x / mask_scaleX;
@@ -153,9 +154,9 @@ function Cat(x, y, container) {
     }
 
     counter += 1;
+    stage.update();
   }
 
-    stage.update();
   }
  
   var last_dx = 0;
@@ -247,11 +248,12 @@ function handleComplete() {
 function mapHandleComplete() {
   // create all the levels
   for (var i = 0; i < map_data.levels.length; i++) {
-    var new_level = new Level(stage, map_data.levels[i].image, map_data.levels[i].mask);
+    var new_level = new Level(map_data.levels[i].image, map_data.levels[i].mask);
     levels.push(new_level);
   }
 
   level = levels[0];
+  stage.addChild(level.container);
 
   cat = new Cat(wd/2, 3*ht/4, stage); 
   stage.update();
