@@ -18,12 +18,16 @@
  
  */
 
+var levels = [];
 var level;
 var cat;
 var wd;
 var ht;
 var stage;
 var loader;
+var map_loader;
+var map_data;
+
 
 var KEYCODE_UP = 38;
 var KEYCODE_DOWN = 40;
@@ -32,10 +36,11 @@ var KEYCODE_RIGHT = 39;
 
 
 document.onkeydown = handleKeyDown;
+document.onkeyup = handleKeyUp;
 
-function Level(container) {
+function Level(container, image, mask) {
    
-  var mask_asset =  loader.getResult("level_mask");
+  var mask_asset =  map_loader.getResult(mask);
   var mask = new createjs.Bitmap(mask_asset);
   var lwd2 = mask.getBounds().width;
   var lht2 = mask.getBounds().height;
@@ -46,7 +51,7 @@ function Level(container) {
   container.addChild(mask);
   
 
-  var lev_asset =  loader.getResult("level");
+  var lev_asset =  map_loader.getResult(image);
   var lev = new createjs.Bitmap(lev_asset);
   
   var lwd = lev.getBounds().width;
@@ -208,15 +213,10 @@ function init() {
 
   // TODO have a Cat.addManifest that populates this
   manifest = [
-    //{src:"assets/level_test_dither.png", id:"level"},
-    //{src:"assets/level_test_mask.png", id:"level_mask"},
-    {src:"assets/castle_door_dither.png", id:"level"},
-    {src:"assets/castle_door_mask.png", id:"level_mask"},
     {src:"assets/cat_body.png", id:"cat_body"},
     {src:"assets/cat_head.png", id:"cat_head"},
     {src:"assets/cat_leg.png", id:"cat_leg"},
-    {src:"grant.json", id:"map_data"}
-    //{src:"assets/map.json", id:"map_data"}
+    {src:"assets/map.json", id:"map_data"}
   ];
 
   loader = new createjs.LoadQueue(false);
@@ -227,42 +227,86 @@ function init() {
 
 
 function handleComplete() {
-  level = new Level(stage);
+
+  map_data = loader.getResult("map_data"); //, true);
+  //console.log(map_data);
+  console.log(map_data.manifest.length);
+  
+  map_loader = new createjs.LoadQueue(false);
+  map_loader.addEventListener("complete", mapHandleComplete);
+  map_loader.loadManifest(map_data.manifest);
+}
+
+function mapHandleComplete() {
+  // create all the levels
+  for (var i = 0; i < map_data.levels.length; i++) {
+    var new_level = new Level(stage, map_data.levels[i].image, map_data.levels[i].mask);
+    levels.push(new_level);
+  }
+
+  level = levels[0];
+
   cat = new Cat(wd/2, 3*ht/4, stage); 
   stage.update();
 
-  console.log((loader.getResult("map_data", true)));
-  //console.log(JSON.parse(loader.getResult("map_data")));
+  createjs.Ticker.on("tick", update);
+  createjs.Ticker.setFPS(20);
+}
+
+var key_left = false;
+var key_right = false;
+var key_up = false;
+var key_down = false;
+
+function update() {
+  var dx = 0; 
+  var dy = 0;
+    
+  if (key_left) dx -= 1;
+  if (key_right) dx += 1;
+  if (key_up) dy -= 1;
+  if (key_down) dy += 1;
+
+    if (cat.move(dx, dy))
+      cat.update();
+    return false;
 }
 
 function handleKeyDown(e) {
   if (!e) { var e = window.event; } 
+  handleKey(e, true);
+}
+function handleKeyUp(e) {
+  if (!e) { var e = window.event; } 
+  handleKey(e, false);
+}
 
+function handleKey(e, val) {
   var update = true;
-  var dx = 0; 
-  var dy = 0;
+
+  // not working yet
+  var key = String.fromCharCode( e.keyCode ).charCodeAt(0);
+  if (key == 'a')  key_left = val; 
+
   switch (e.keyCode) {
     case KEYCODE_LEFT:
-      dx = -1;
+      key_left = val;
       break;
     case KEYCODE_RIGHT:
-      dx = 1;
+      key_right = val;
       break;
     case KEYCODE_UP:
-      dy = -1;
+      key_up = val;
       break;
     case KEYCODE_DOWN:
-      dy = 1;
+      key_down = val;
       break;
     default:
       update = false;
+      //return true;
       break;
   }
 
-  if (update) {
-    if (cat.move(dx, dy))
-      cat.update();
-    return false;
-  }
+  return false;
 
 }

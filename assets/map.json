@@ -1,6 +1,12 @@
-{
-  [
-    {"image": "level_test_dither.png", "mask": "level_test_mask.png"},
-    {"image": "castle_door_dither.png", "mask": "castle_door_mask.png"}
+{ 
+  "manifest": [
+    {"src": "assets/level_test_dither.png",  "id":"level_test"},
+    {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
+    {"src": "assets/castle_door_dither.png", "id":"castle_door"},
+    {"src": "assets/castle_door_mask.png",   "id":"castle_door_mask"}
+  ],
+  "levels": [
+    {"image": "level_test",  "mask": "level_test_mask"},
+    {"image": "castle_door", "mask": "castle_door_mask"}
   ]
 }
