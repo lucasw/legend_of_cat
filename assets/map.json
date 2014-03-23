@@ -19,7 +19,7 @@
       "mask": "castle_door_mask", 
       "exits": "castle_door_exits",
       "connections": [
-        {"value": "202", "level":"level_test", "x":"194", "y":"117"}
+        {"value": "202", "level":"level_test", "x":"150", "y":"107"}
       ]
     }
   ]
