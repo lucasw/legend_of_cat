@@ -27,6 +27,7 @@ var ht;
 var stage;
 var loader;
 var map_loader;
+var snd_loader;
 var map_data;
 
 
@@ -269,7 +270,6 @@ function Cat(x, y, container) {
 }
 
 function init() {
-  use_sound = createjs.Sound.initializeDefaultPlugins();
   // has to be the same string as canvas id in html
   stage = new createjs.Stage("Legend of Cat");
 
@@ -283,31 +283,53 @@ function init() {
 
   // TODO have a Cat.addManifest that populates this
   manifest = [
-    {src:"assets/110011__tuberatanka__cat-meow.wav", id:"meow"},
     {src:"assets/cat_body.png", id:"cat_body"},
     {src:"assets/cat_head.png", id:"cat_head"},
     {src:"assets/cat_leg.png", id:"cat_leg"},
     {src:"assets/map.json", id:"map_data"}
   ];
 
-  loader = new createjs.LoadQueue(false);
+  loader = new createjs.LoadQueue(true);
   loader.addEventListener("complete", handleComplete);
   loader.loadManifest(manifest);
-
 }
 
-
 function handleComplete() {
+  
+  use_sound = createjs.Sound.initializeDefaultPlugins();
+  console.log("use sound " + use_sound);
+  var assets_path = "assets/";
+  snd_manifest = [
+    {src:"meow.wav", id:"meow2"},
+    {src:"110011__tuberatanka__cat-meow.wav", id:"meow"}
+  ];
+ 
+  createjs.Sound.alternateExtensions = ["mp3"];
+
+  snd_loader = new createjs.LoadQueue(true, assets_path); 
+  snd_loader.installPlugin(createjs.Sound);
+  snd_loader.addEventListener("progress", handleSoundProgress);
+  snd_loader.addEventListener("complete", handleSoundComplete);
+  snd_loader.loadManifest(snd_manifest);
+}
+
+function handleSoundProgress(event) {
+  console.log("loading " + (event ? event.progress : 0));
+}
+
+function handleSoundComplete() {
+  console.log("load sound complete " + snd_loader.getResult("meow"));
+  var inst = createjs.Sound.play("meow"); //,  {interrupt:createjs.Sound.INTERRUPT_NONE, loop:-1, volume:0.9});
+  //inst.addEventListener("complete", test1);
+  console.log(inst.playState);
 
   map_data = loader.getResult("map_data"); //, true);
   //console.log(map_data);
   console.log(map_data.manifest.length);
-  createjs.Sound.play("meow",  {interrupt:createjs.Sound.INTERRUPT_NONE, loop:-1, volume:0.9});
-  
+
   map_loader = new createjs.LoadQueue(true);
   map_loader.addEventListener("complete", mapHandleComplete);
   map_loader.loadManifest(map_data.manifest);
-  
 }
 
 function mapHandleComplete() {
@@ -361,8 +383,12 @@ function handleKeyUp(e) {
 function handleKey(e, val) {
   var update = true;
 
-  // not working yet
   var key = e.keyCode; //String.fromCharCode( e.keyCode ).charCodeAt(0);
+  if (key == ' '.charCodeAt(0)) {
+    console.log("meow");
+    if (use_sound)
+      createjs.Sound.play("meow", createjs.Sound.INTERUPT_LATE);
+  }
   if (key == 'A'.charCodeAt(0))  key_left = val; 
   if (key == 'D'.charCodeAt(0))  key_right = val; 
   if (key == 'W'.charCodeAt(0))  key_up = val; 
