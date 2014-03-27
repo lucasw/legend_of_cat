@@ -18,6 +18,7 @@
  
  */
 
+var use_sound = false;
 var levels = [];
 var level;
 var cat;
@@ -42,6 +43,7 @@ function Level(json_data) {
   
   var json = json_data;
   this.name = json.image;
+  
   console.log("loading " + this.name + " " + json_data.exits + " " + json.exits);
   this.container = new createjs.Container();
   
@@ -267,6 +269,7 @@ function Cat(x, y, container) {
 }
 
 function init() {
+  use_sound = createjs.Sound.initializeDefaultPlugins();
   // has to be the same string as canvas id in html
   stage = new createjs.Stage("Legend of Cat");
 
@@ -280,6 +283,7 @@ function init() {
 
   // TODO have a Cat.addManifest that populates this
   manifest = [
+    {src:"assets/110011__tuberatanka__cat-meow.wav", id:"meow"},
     {src:"assets/cat_body.png", id:"cat_body"},
     {src:"assets/cat_head.png", id:"cat_head"},
     {src:"assets/cat_leg.png", id:"cat_leg"},
@@ -298,10 +302,12 @@ function handleComplete() {
   map_data = loader.getResult("map_data"); //, true);
   //console.log(map_data);
   console.log(map_data.manifest.length);
+  createjs.Sound.play("meow",  {interrupt:createjs.Sound.INTERRUPT_NONE, loop:-1, volume:0.9});
   
-  map_loader = new createjs.LoadQueue(false);
+  map_loader = new createjs.LoadQueue(true);
   map_loader.addEventListener("complete", mapHandleComplete);
   map_loader.loadManifest(map_data.manifest);
+  
 }
 
 function mapHandleComplete() {
