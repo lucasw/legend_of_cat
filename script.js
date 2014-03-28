@@ -49,8 +49,8 @@ function Level(json_data) {
   this.container = new createjs.Container();
   
   var exits_asset =  map_loader.getResult(json.exits);
+  if (exits_asset != null) {
   var exits = new createjs.Bitmap(exits_asset);
-  
   var lwd2e = exits.getBounds().width;
   var lht2e = exits.getBounds().height;
   var exits_scaleX = wd/lwd2e;
@@ -58,8 +58,10 @@ function Level(json_data) {
   //console.log("exits_scaleX " + exits_scaleX + ", Y " + exits_scaleY + " " + lwd2 + " " + lht2);
   exits.cache(0,0,lwd2e,lht2e);
   this.container.addChild(exits);
+  }
   
   var mask_asset =  map_loader.getResult(json.mask);
+  if (mask_asset != null) {
   var mask = new createjs.Bitmap(mask_asset);
   var lwd2 = mask.getBounds().width;
   var lht2 = mask.getBounds().height;
@@ -68,10 +70,10 @@ function Level(json_data) {
   //console.log("mask_scaleX " + mask_scaleX + ", Y " + mask_scaleY + " " + lwd2 + " " + lht2);
   mask.cache(0,0,lwd2,lht2);
   this.container.addChild(mask);
+  }
 
   var lev_asset =  map_loader.getResult(json.image);
   var lev = new createjs.Bitmap(lev_asset);
-  
   var lwd = lev.getBounds().width;
   var lht = lev.getBounds().height;
   lev.scaleX = wd/lwd;
@@ -90,6 +92,7 @@ function Level(json_data) {
   }
 
   var getPixel = function(bitmap, x,y) {
+    if (bitmap == undefined) return 0;
     // TODO replace mask_scaleX/Y with something stored in bitmap
     var test_x = x / mask_scaleX;
     var test_y = y / mask_scaleY;
@@ -143,6 +146,10 @@ function Level(json_data) {
       }
     }
     return false;
+  }
+
+  this.getSong = function() {
+    return json.music;
   }
 
   return this;
@@ -304,40 +311,62 @@ function init() {
 }
 
 function handleComplete() {
-  
-  use_sound = createjs.Sound.initializeDefaultPlugins();
-  console.log("use sound " + use_sound);
-  var assets_path = "assets/";
-  snd_manifest = [
-    {src:"110011__tuberatanka__cat-meow.wav", id:"meow"}
-  ];
- 
-  createjs.Sound.alternateExtensions = ["mp3"];
+  //console.log("load sound complete " + snd_loader.getResult("arcadia"));
+  //var inst = createjs.Sound.play("meow"); //,  {interrupt:createjs.Sound.INTERRUPT_NONE, loop:-1, volume:0.9});
+  //inst.addEventListener("complete", test1);
+  //console.log(inst.playState);
 
-  snd_loader = new createjs.LoadQueue(true, assets_path); 
-  snd_loader.installPlugin(createjs.Sound);
-  snd_loader.addEventListener("progress", handleSoundProgress);
-  snd_loader.addEventListener("complete", handleSoundComplete);
-  snd_loader.loadManifest(snd_manifest);
+  map_data = loader.getResult("map_data"); //, true);
+  //console.log(map_data);
+  console.log(map_data.manifest.length);
+ 
+  loadMusic();
+}
+
+function loadMap() {
+  map_loader = new createjs.LoadQueue(true);
+  map_loader.addEventListener("complete", mapHandleComplete);
+  map_loader.loadManifest(map_data.manifest);
 }
 
 function handleSoundProgress(event) {
   console.log("loading " + (event ? event.progress : 0));
 }
 
-function handleSoundComplete() {
-  console.log("load sound complete " + snd_loader.getResult("meow"));
-  var inst = createjs.Sound.play("meow"); //,  {interrupt:createjs.Sound.INTERRUPT_NONE, loop:-1, volume:0.9});
-  //inst.addEventListener("complete", test1);
-  console.log(inst.playState);
+function loadMusic() {
+  use_sound = createjs.Sound.initializeDefaultPlugins();
+  console.log("use sound " + use_sound + " " + 
+      map_data.assets_path + " " + map_data.snd_manifest);
 
-  map_data = loader.getResult("map_data"); //, true);
-  //console.log(map_data);
-  console.log(map_data.manifest.length);
+  console.log(map_data.snd_manifest[0].src);
 
-  map_loader = new createjs.LoadQueue(true);
-  map_loader.addEventListener("complete", mapHandleComplete);
-  map_loader.loadManifest(map_data.manifest);
+  createjs.Sound.alternateExtensions = ["mp3"];
+
+  snd_loader = new createjs.LoadQueue(true, map_data.assets_path); 
+  snd_loader.installPlugin(createjs.Sound);
+  //snd_loader.addEventListener("progress", handleSoundProgress);
+  snd_loader.addEventListener("complete", soundHandleComplete);
+  snd_loader.loadManifest(map_data.snd_manifest);
+}
+
+var music_inst = null;
+//var music_complete = false;
+//var map_complete = false;
+
+function soundHandleComplete() {
+  console.log("music and sound loaded" + snd_loader.getResult("arcadia"));
+  loadMap();
+}
+
+function manageMusic() {
+  var song = level.getSong();
+ 
+  if (music_inst == null) {
+    music_inst = createjs.Sound.play(song, { loop:-1 } );
+    console.log(song + " " + music_inst.playState);
+  }
+  music_complete = true;
+
 }
 
 function mapHandleComplete() {
@@ -350,11 +379,16 @@ function mapHandleComplete() {
   }
 
   level = levels[0];
+  manageMusic();
   stage.addChild(level.container);
 
   cat = new Cat(wd/2, 3*ht/4, stage); 
   stage.update();
+  
+  startTicker();
+}
 
+function startTicker() {
   createjs.Ticker.on("tick", update);
   createjs.Ticker.setFPS(20);
 }

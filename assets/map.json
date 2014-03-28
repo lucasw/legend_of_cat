@@ -1,4 +1,9 @@
-{ 
+{
+  "assets_path": "assets/",
+  "snd_manifest": [
+    {"src": "music/Arcadia.mp3",  "id":"arcadia"},
+    {"src": "110011__tuberatanka__cat-meow.wav", "id":"meow"}
+  ],
   "manifest": [
     {"src": "assets/title.png",  "id":"title"},
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
@@ -10,7 +15,18 @@
     {"src": "assets/castle_door_exits.png",  "id":"castle_door_exits"}
   ],
   "levels": [
+    { "image": "title", 
+      "music": "arcadia",
+      "mask": "",
+      "obstacles": [
+      ],
+      "exits": "",
+      "connections": [
+        {"value": "0", "level":"level_test", "x":"150", "y":"150"}
+      ]
+    },
     { "image": "level_test",  
+      "music": "arcadia",
       "mask": "level_test_mask", 
       "obstacles": [
       ],
@@ -20,6 +36,7 @@
       ]
     },
     { "image": "castle_door", 
+      "music": "arcadia",
       "mask": "castle_door_mask", 
       "obstacles": [
         {"image": "castle_door_door"}
