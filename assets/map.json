@@ -1,15 +1,19 @@
 { 
   "manifest": [
+    {"src": "assets/title.png",  "id":"title"},
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
-    {"src": "assets/level_test_exits.png",    "id":"level_test_exits"},
+    {"src": "assets/level_test_exits.png",   "id":"level_test_exits"},
+    {"src": "assets/castle_door_door.png",   "id":"castle_door_door"},
     {"src": "assets/castle_door_dither.png", "id":"castle_door"},
     {"src": "assets/castle_door_mask.png",   "id":"castle_door_mask"},
-    {"src": "assets/castle_door_exits.png",   "id":"castle_door_exits"}
+    {"src": "assets/castle_door_exits.png",  "id":"castle_door_exits"}
   ],
   "levels": [
     { "image": "level_test",  
       "mask": "level_test_mask", 
+      "obstacles": [
+      ],
       "exits": "level_test_exits",
       "connections": [
         {"value": "102", "level":"castle_door", "x":"160", "y":"160"}
@@ -17,6 +21,9 @@
     },
     { "image": "castle_door", 
       "mask": "castle_door_mask", 
+      "obstacles": [
+        {"image": "castle_door_door"}
+      ],
       "exits": "castle_door_exits",
       "connections": [
         {"value": "202", "level":"level_test", "x":"150", "y":"107"}

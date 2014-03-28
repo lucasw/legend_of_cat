@@ -80,6 +80,15 @@ function Level(json_data) {
   
   //stage.update();
 
+  for (var i = 0; i < json.obstacles.length; i++) {
+    console.log(json.obstacles[i].image);
+    var asset =  map_loader.getResult(json.obstacles[i].image);
+    var lev = new createjs.Bitmap(asset);
+    lev.scaleX = wd/lwd;
+    lev.scaleY = ht/lht;
+    this.container.addChild(lev);
+  }
+
   var getPixel = function(bitmap, x,y) {
     // TODO replace mask_scaleX/Y with something stored in bitmap
     var test_x = x / mask_scaleX;
@@ -300,7 +309,6 @@ function handleComplete() {
   console.log("use sound " + use_sound);
   var assets_path = "assets/";
   snd_manifest = [
-    {src:"meow.wav", id:"meow2"},
     {src:"110011__tuberatanka__cat-meow.wav", id:"meow"}
   ];
  
@@ -387,7 +395,7 @@ function handleKey(e, val) {
   if (key == ' '.charCodeAt(0)) {
     console.log("meow");
     if (use_sound)
-      createjs.Sound.play("meow", createjs.Sound.INTERUPT_LATE);
+      createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
   }
   if (key == 'A'.charCodeAt(0))  key_left = val; 
   if (key == 'D'.charCodeAt(0))  key_right = val; 
