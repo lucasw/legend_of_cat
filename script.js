@@ -40,6 +40,32 @@ var KEYCODE_RIGHT = 39;
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
+function Cloud(parent_container) {
+  var asset =  map_loader.getResult("cloud");
+
+}
+  
+function makeBitmap(asset_name, auto_scale) {
+  if (asset_name == null) {
+    return null;
+  }
+  if (asset_name == "") return null;
+
+  var asset =  map_loader.getResult(asset_name);
+  var bitmap = new createjs.Bitmap(asset);
+  if (bitmap == null) return null;
+  console.log(asset_name + " " + bitmap);
+  var lwd2e = bitmap.getBounds().width;
+  var lht2e = bitmap.getBounds().height;
+  if (auto_scale) {
+    bitmap.scaleX = wd/lwd2e;
+    bitmap.scaleY = ht/lht2e;
+  }
+  //console.log("exits_scaleX " + exits_scaleX + ", Y " + exits_scaleY + " " + lwd2 + " " + lht2);
+  bitmap.cache(0,0,lwd2e,lht2e);
+  return bitmap;
+}
+
 function Level(json_data) {
   
   var json = json_data;
@@ -48,54 +74,32 @@ function Level(json_data) {
   console.log("loading " + this.name + " " + json_data.exits + " " + json.exits);
   this.container = new createjs.Container();
   
-  var exits_asset =  map_loader.getResult(json.exits);
-  if (exits_asset != null) {
-  var exits = new createjs.Bitmap(exits_asset);
-  var lwd2e = exits.getBounds().width;
-  var lht2e = exits.getBounds().height;
-  var exits_scaleX = wd/lwd2e;
-  var exits_scaleY = ht/lht2e;
-  //console.log("exits_scaleX " + exits_scaleX + ", Y " + exits_scaleY + " " + lwd2 + " " + lht2);
-  exits.cache(0,0,lwd2e,lht2e);
-  this.container.addChild(exits);
-  }
+  var exits = makeBitmap(json.exits,true);
+  if (exits != null) this.container.addChild(exits);
   
-  var mask_asset =  map_loader.getResult(json.mask);
-  if (mask_asset != null) {
-  var mask = new createjs.Bitmap(mask_asset);
-  var lwd2 = mask.getBounds().width;
-  var lht2 = mask.getBounds().height;
-  var mask_scaleX = wd/lwd2;
-  var mask_scaleY = ht/lht2;
-  //console.log("mask_scaleX " + mask_scaleX + ", Y " + mask_scaleY + " " + lwd2 + " " + lht2);
-  mask.cache(0,0,lwd2,lht2);
-  this.container.addChild(mask);
-  }
+  var mask = makeBitmap(json.mask,true); 
+  if (mask != null) this.container.addChild(mask);
 
-  var lev_asset =  map_loader.getResult(json.image);
-  var lev = new createjs.Bitmap(lev_asset);
-  var lwd = lev.getBounds().width;
-  var lht = lev.getBounds().height;
-  lev.scaleX = wd/lwd;
-  lev.scaleY = ht/lht;
+  var bg_container = new createjs.Container();
+  this.container.addChild(bg_container);
+
+  var bg = makeBitmap(json.bg,true);
+  if (bg != null) this.bg_container.addChild(lev);
+
+  var lev = makeBitmap(json.image,true);
   this.container.addChild(lev);
-  
-  //stage.update();
 
   for (var i = 0; i < json.obstacles.length; i++) {
     console.log(json.obstacles[i].image);
-    var asset =  map_loader.getResult(json.obstacles[i].image);
-    var lev = new createjs.Bitmap(asset);
-    lev.scaleX = wd/lwd;
-    lev.scaleY = ht/lht;
-    this.container.addChild(lev);
+    var asset = makeBitmap(json.obstacles[i].image,true);
+    this.container.addChild(asset);
   }
 
   var getPixel = function(bitmap, x,y) {
     if (bitmap == undefined) return 0;
     // TODO replace mask_scaleX/Y with something stored in bitmap
-    var test_x = x / mask_scaleX;
-    var test_y = y / mask_scaleY;
+    var test_x = x / mask.scaleX;
+    var test_y = y / mask.scaleY;
     if (test_x < 0) return 0;
     if (test_y < 0) return 0;
     if (test_x >= lwd2) return 0;
