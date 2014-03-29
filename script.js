@@ -432,7 +432,7 @@ function mapHandleComplete() {
   manageMusic();
   stage.addChild(level.container);
 
-  cat = new Cat(wd/2, 3*ht/4, stage); 
+  cat = new Cat(wd/2, 3.5*ht/4, stage); 
   stage.update();
   
   startTicker();
