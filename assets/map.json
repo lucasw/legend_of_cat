@@ -7,6 +7,7 @@
   "manifest": [
     {"src": "assets/title.png",  "id":"title"},
     {"src": "assets/title_mask.png",  "id":"title_mask"},
+    {"src": "assets/title_exits.png",  "id":"title_exits"},
     {"src": "assets/sky.png",    "id":"sky_blue"},
     {"src": "assets/cloud.png",  "id":"cloud"},
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
@@ -25,9 +26,9 @@
       "mask": "title_mask",
       "obstacles": [
       ],
-      "exits": "",
+      "exits": "title_exits",
       "connections": [
-        {"value": "0", "level":"level_test", "x":"150", "y":"140"}
+        {"value": "150", "level":"level_test", "x":"150", "y":"140"}
       ]
     },
     { "image": "level_test",  

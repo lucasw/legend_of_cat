@@ -166,8 +166,8 @@ function Level(json_data) {
     // see if the pixel value of the current exit position matches the value of an exit
     // then update the stage and player_container position to move to the new level
     var exit_val = getExit(player_container.x, player_container.y);
-    if (exit_val === 0) return;
     //console.log("exit val " + exit_val);
+    if (exit_val === 0) return;
 
     for (var i = 0; i < json.connections.length; i++) {
       if (exit_val == json.connections[i].value) {
@@ -432,7 +432,7 @@ function mapHandleComplete() {
   manageMusic();
   stage.addChild(level.container);
 
-  cat = new Cat(wd/2, 3.5*ht/4, stage); 
+  cat = new Cat(wd/2, 3.7*ht/4, stage); 
   stage.update();
   
   startTicker();
