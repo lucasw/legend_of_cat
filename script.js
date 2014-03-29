@@ -71,7 +71,6 @@ function Cloud(parent_container, x, y, scale) {
   parent_container.addChild(im);
 
   this.update = function() {
-    console.log('t');
     if (Math.random() < 0.1) {
       im.x += 1;
       if (im.x > wd) im.x = -10;
@@ -123,13 +122,14 @@ function Level(json_data) {
 
   var getPixel = function(bitmap, x,y) {
     if (bitmap == undefined) return 0;
+    //console.log(bitmap + " " + x + " " + y);
     // TODO replace mask_scaleX/Y with something stored in bitmap
     var test_x = x / mask.scaleX;
     var test_y = y / mask.scaleY;
     if (test_x < 0) return 0;
     if (test_y < 0) return 0;
-    if (test_x >= lwd2) return 0;
-    if (test_y >= lht2) return 0;
+    if (test_x >= bitmap.getBounds().width) return 0;
+    if (test_y >= bitmap.getBounds().height) return 0;
 
     //console.log("get mask " + test_x + " " + test_y);
     var data = bitmap.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
@@ -198,7 +198,7 @@ function Cat(x, y, container) {
   cont.scaleX = 4;
   cont.scaleY = cont.scaleX;
   cont.regX = 16;
-  cont.regY = 16;
+  cont.regY = 30;
   container.addChild(cont);
 
   var legs1 = new createjs.Container();
