@@ -6,7 +6,7 @@
   ],
   "manifest": [
     {"src": "assets/title.png",  "id":"title"},
-    {"src": "assets/sky.png",  "id":"sky_blue"},
+    {"src": "assets/sky.png",    "id":"sky_blue"},
     {"src": "assets/cloud.png",  "id":"cloud"},
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
@@ -18,7 +18,7 @@
   ],
   "levels": [
     { "image": "title", 
-    { "bg": "sky_blue",
+      "bg": "sky_blue",
       "clouds": "5",
       "music": "arcadia",
       "mask": "",
@@ -30,7 +30,7 @@
       ]
     },
     { "image": "level_test",  
-    { "bg": "sky_blue", 
+      "bg": "sky_blue", 
       "music": "arcadia",
       "mask": "level_test_mask", 
       "obstacles": [

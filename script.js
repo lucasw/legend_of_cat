@@ -39,11 +39,6 @@ var KEYCODE_RIGHT = 39;
 
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
-
-function Cloud(parent_container) {
-  var asset =  map_loader.getResult("cloud");
-
-}
   
 function makeBitmap(asset_name, auto_scale) {
   if (asset_name == null) {
@@ -54,7 +49,7 @@ function makeBitmap(asset_name, auto_scale) {
   var asset =  map_loader.getResult(asset_name);
   var bitmap = new createjs.Bitmap(asset);
   if (bitmap == null) return null;
-  console.log(asset_name + " " + bitmap);
+  //console.log(asset_name); // + " " + bitmap);
   var lwd2e = bitmap.getBounds().width;
   var lht2e = bitmap.getBounds().height;
   if (auto_scale) {
@@ -64,6 +59,25 @@ function makeBitmap(asset_name, auto_scale) {
   //console.log("exits_scaleX " + exits_scaleX + ", Y " + exits_scaleY + " " + lwd2 + " " + lht2);
   bitmap.cache(0,0,lwd2e,lht2e);
   return bitmap;
+}
+
+function Cloud(parent_container, x, y, scale) {
+  var im = makeBitmap("cloud", false);
+  im.scaleX = scale;
+  im.scaleY = scale;
+  im.x = x;
+  im.y = y;
+
+  parent_container.addChild(im);
+
+  this.update = function() {
+    console.log('t');
+    if (Math.random() < 0.1) {
+      im.x += 1;
+      if (im.x > wd) im.x = -10;
+    }
+  }
+  return this;
 }
 
 function Level(json_data) {
@@ -84,10 +98,22 @@ function Level(json_data) {
   this.container.addChild(bg_container);
 
   var bg = makeBitmap(json.bg,true);
-  if (bg != null) this.bg_container.addChild(lev);
+  if (bg != null) bg_container.addChild(bg);
 
   var lev = makeBitmap(json.image,true);
   this.container.addChild(lev);
+
+  var clouds = [];
+  if (json.clouds > 0) {
+    console.log("clouds " + this.name + " " + json.clouds);
+
+    for (var i = 0; i < json.clouds; i++) {
+      var x = wd * Math.random();
+      var y = ht * 0.4 * Math.random();
+      var cloud = new Cloud(bg_container, x, y, lev.scaleX);
+      clouds.push(cloud);
+    }
+  }
 
   for (var i = 0; i < json.obstacles.length; i++) {
     console.log(json.obstacles[i].image);
@@ -130,7 +156,6 @@ function Level(json_data) {
         console.log(level.name);
         player_container.x = new_level.x * mask_scaleX;
         player_container.y = new_level.y * mask_scaleY;
-        stage.update();
         return true;
       }
     }
@@ -154,6 +179,12 @@ function Level(json_data) {
 
   this.getSong = function() {
     return json.music;
+  }
+
+  this.update = function() {
+    for (var i = 0; i < clouds.length; i++) {
+      clouds[i].update();
+    }
   }
 
   return this;
@@ -251,7 +282,6 @@ function Cat(x, y, container) {
       else if (legs1.x != 6) legs1.x = 6;
     }
       
-  stage.update();
 
   }
  
@@ -428,8 +458,13 @@ function update() {
   if (key_up) dy -= dval;
   if (key_down) dy += dval;
 
+  // TODO update all levels if things can happen off-screen
+  level.update();
+
   cat.move(dx, dy);
   cat.update();
+  
+  stage.update();
   return false;
 }
 
