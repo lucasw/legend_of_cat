@@ -230,8 +230,24 @@ function Cat(x, y, container) {
     }
 
     counter += 1;
-    stage.update();
+  } else {
+    // move a little sometimes
+    if (Math.random() < 0.01) {
+      if (tail.x == 22) tail.x = 21
+      else if (tail.x == 21) tail.x = 22
+    }
+    if (Math.random() < 0.01) {
+      if (head.y == -2) head.y = -3;
+      else if (head.y == -3) head.y = -2;
+    }
   }
+    
+    if (Math.random() < 0.01) {
+      if (legs1.x == 6) legs1.x = 5;
+      else if (legs1.x != 6) legs1.x = 6;
+    }
+      
+  stage.update();
 
   }
  
@@ -408,9 +424,9 @@ function update() {
   if (key_up) dy -= dval;
   if (key_down) dy += dval;
 
-    if (cat.move(dx, dy))
-      cat.update();
-    return false;
+  cat.move(dx, dy);
+  cat.update();
+  return false;
 }
 
 function handleKeyDown(e) {
