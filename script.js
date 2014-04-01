@@ -36,6 +36,7 @@ var KEYCODE_DOWN = 40;
 var KEYCODE_LEFT = 37;
 var KEYCODE_RIGHT = 39;
 
+var scale = 4;
 
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
@@ -53,8 +54,8 @@ function makeBitmap(asset_name, auto_scale) {
   var lwd2e = bitmap.getBounds().width;
   var lht2e = bitmap.getBounds().height;
   if (auto_scale) {
-    bitmap.scaleX = wd/lwd2e;
-    bitmap.scaleY = ht/lht2e;
+  //  bitmap.scaleX = wd/lwd2e;
+  //  bitmap.scaleY = ht/lht2e;
   }
   //console.log("exits_scaleX " + exits_scaleX + ", Y " + exits_scaleY + " " + lwd2 + " " + lht2);
   bitmap.cache(0,0,lwd2e,lht2e);
@@ -63,8 +64,8 @@ function makeBitmap(asset_name, auto_scale) {
 
 function Cloud(parent_container, x, y, scale) {
   var im = makeBitmap("cloud", false);
-  im.scaleX = scale;
-  im.scaleY = scale;
+  //im.scaleX = scale;
+  //im.scaleY = scale;
   im.x = x;
   im.y = y;
 
@@ -102,11 +103,12 @@ function Item(json_data, scale) {
   
   var image = makeBitmap(json.image, false);
   this.container.addChild(image); 
-  image.x = json.x * scale;
-  image.y = json.y * scale;
-
-  image.scaleX = scale;
-  image.scaleY = scale;
+  this.container.x = json.x * scale;
+  this.container.y = json.y * scale;
+  image.regX = image.getBounds().width/2;
+  image.regY = image.getBounds().height/2;
+  //image.scaleX = scale;
+  //image.scaleY = scale;
 
   return this;
 }
@@ -183,6 +185,21 @@ function Level(json_data) {
     obstacles.push(obstacle);
   }
 
+  this.getItem = function(x,y) {
+    for (var i = 0; i < items.length; i++) {
+      console.log(x + " " + y + ", " + items[i].container.x + " " + items[i].container.y);
+      if ((Math.abs(x - items[i].container.x) < 16 * lev.scaleX) && 
+          (Math.abs(y - items[i].container.y) < 16 * lev.scaleX)) {
+        //console.log("got item");
+        var got_item = items[i];
+        items.splice(i, 1);
+        this.container.removeChild(got_item.container);
+        return got_item;
+      }
+    }
+    return null;
+  }
+  
   this.getMask = function(x,y) {
     var val = getPixel(mask, x, y);
     //console.log("val " + val);
@@ -250,8 +267,8 @@ function Cat(x, y, container) {
   var cont = new createjs.Container();
   cont.x = x;
   cont.y = y;
-  cont.scaleX = 4;
-  cont.scaleY = cont.scaleX;
+  //cont.scaleX = 4;
+  //cont.scaleY = cont.scaleX;
   cont.regX = 16;
   cont.regY = 30;
   container.addChild(cont);
@@ -296,14 +313,26 @@ function Cat(x, y, container) {
   head.x = -8;
   head.y = -2;
 
+  var item = null;
+
   this.action = function(val) {
     if (val) {
     console.log("meow");
     leg1.rotation = 90;
     if (use_sound)
       createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
+   
+      if (item === null) {
+        item = level.getItem(cont.x, cont.y);
+        if (item !== null) cont.addChild(item.container);
+      } else {
+        cont.removeChild(item.container);
+        //level.dropItem(cont.x, cont.y);
+        item = null;
+      }
     } else {
-      leg1.rotation = 0;
+      if (item === null)
+        leg1.rotation = 0;
     }
   }
 
@@ -408,8 +437,8 @@ function init() {
   // has to be the same string as canvas id in html
   stage = new createjs.Stage("Legend of Cat");
 
-  wd = stage.canvas.width;
-  ht = stage.canvas.height;
+  wd = stage.canvas.width / scale;
+  ht = stage.canvas.height / scale;
 
   var context = stage.canvas.getContext("2d");
   context.imageSmoothingEnabled = false;
@@ -500,6 +529,8 @@ function mapHandleComplete() {
   level = levels[0];
   manageMusic();
   stage.addChild(level.container);
+  stage.scaleX = scale;
+  stage.scaleY = scale;
 
   cat = new Cat(wd/2, 3.7*ht/4, stage); 
   stage.update();
@@ -521,7 +552,7 @@ function update() {
   var dx = 0; 
   var dy = 0;
   
-  var dval = 3;
+  var dval = 1;
   if (key_left) dx -= dval;
   if (key_right) dx += dval;
   if (key_up) dy -= dval;
