@@ -98,7 +98,8 @@ function Cloud(parent_container, x, y, scale) {
 
 function Item(json_data, scale) {
   var json = json_data;
-
+  
+  this.name = json.image;
   this.container = new createjs.Container();
   
   var image = makeBitmap(json.image, false);
@@ -188,8 +189,8 @@ function Level(json_data) {
   this.getItem = function(x,y) {
     for (var i = 0; i < items.length; i++) {
       console.log(x + " " + y + ", " + items[i].container.x + " " + items[i].container.y);
-      if ((Math.abs(x - items[i].container.x) < 16 * lev.scaleX) && 
-          (Math.abs(y - items[i].container.y) < 16 * lev.scaleX)) {
+      if ((Math.abs(x - items[i].container.x) < 32 * lev.scaleX) && 
+          (Math.abs(y - items[i].container.y) < 32 * lev.scaleX)) {
         //console.log("got item");
         var got_item = items[i];
         items.splice(i, 1);
@@ -324,7 +325,12 @@ function Cat(x, y, container) {
    
       if (item === null) {
         item = level.getItem(cont.x, cont.y);
-        if (item !== null) cont.addChild(item.container);
+        if (item !== null) {
+          console.log("got item " + item.name);
+          item.container.x = -16;
+          item.container.y = 16;
+          cont.addChild(item.container);
+        }
       } else {
         cont.removeChild(item.container);
         //level.dropItem(cont.x, cont.y);
