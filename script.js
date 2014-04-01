@@ -292,6 +292,12 @@ function Cat(x, y, container) {
   head.x = -8;
   head.y = -2;
 
+  this.action = function() {
+    console.log("meow");
+    leg2.rotation = 90;
+    if (use_sound)
+      createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
+  }
 
   var counter = 0;
   this.update = function() {
@@ -537,9 +543,7 @@ function handleKey(e, val) {
 
   var key = e.keyCode; //String.fromCharCode( e.keyCode ).charCodeAt(0);
   if (key == ' '.charCodeAt(0)) {
-    console.log("meow");
-    if (use_sound)
-      createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
+    cat.action(); 
   }
   if (key == 'A'.charCodeAt(0))  key_left = val; 
   if (key == 'D'.charCodeAt(0))  key_right = val; 
