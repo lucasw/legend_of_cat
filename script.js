@@ -200,6 +200,13 @@ function Level(json_data) {
     }
     return null;
   }
+
+  this.putItem = function(item, x, y) {
+    this.container.addChild(item.container); 
+    items.push(item);
+    item.container.x = x;
+    item.container.y = y;
+  }
   
   this.getMask = function(x,y) {
     var val = getPixel(mask, x, y);
@@ -333,7 +340,7 @@ function Cat(x, y, container) {
         }
       } else {
         cont.removeChild(item.container);
-        //level.dropItem(cont.x, cont.y);
+        level.putItem(item, cont.x + -24 * cont.scaleX, cont.y);
         item = null;
       }
     } else {
