@@ -154,8 +154,8 @@ function Level(json_data) {
         level = levels[i];
         stage.addChildAt(level.container, 0);
         console.log(level.name);
-        player_container.x = new_level.x * mask_scaleX;
-        player_container.y = new_level.y * mask_scaleY;
+        player_container.x = new_level.x * mask.scaleX;
+        player_container.y = new_level.y * mask.scaleY;
         return true;
       }
     }
