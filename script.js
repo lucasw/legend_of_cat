@@ -264,8 +264,12 @@ function Cat(x, y, container) {
   var leg_asset =  loader.getResult("cat_leg");
   var leg1 = new createjs.Bitmap(leg_asset);
   var leg2 = new createjs.Bitmap(leg_asset);
-  leg1.x = -10;
+  leg1.x = -2;
+  leg1.regX = 8;
+  leg1.regY = 0;
   leg2.x = 10;
+  //leg2.regX = 8;
+  //leg2.regY = 8;
   legs1.addChild(leg1); 
   legs1.addChild(leg2); 
   
@@ -292,11 +296,15 @@ function Cat(x, y, container) {
   head.x = -8;
   head.y = -2;
 
-  this.action = function() {
+  this.action = function(val) {
+    if (val) {
     console.log("meow");
-    leg2.rotation = 90;
+    leg1.rotation = 90;
     if (use_sound)
       createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
+    } else {
+      leg1.rotation = 0;
+    }
   }
 
   var counter = 0;
@@ -543,7 +551,7 @@ function handleKey(e, val) {
 
   var key = e.keyCode; //String.fromCharCode( e.keyCode ).charCodeAt(0);
   if (key == ' '.charCodeAt(0)) {
-    cat.action(); 
+    cat.action(val); 
   }
   if (key == 'A'.charCodeAt(0))  key_left = val; 
   if (key == 'D'.charCodeAt(0))  key_right = val; 
