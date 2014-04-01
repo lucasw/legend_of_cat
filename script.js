@@ -557,9 +557,13 @@ function mapHandleComplete() {
         map_data.levels[i] 
         );
     levels.push(new_level);
+
+    if (new_level.name === map_data.start_level) {
+      level = new_level;
+    }
   }
 
-  level = levels[0];
+  //level = levels[0];
   manageMusic();
   stage.addChild(level.container);
   stage.scaleX = scale;
