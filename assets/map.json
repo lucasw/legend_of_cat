@@ -3,6 +3,7 @@
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
+    {"src": "Old Door Creaking-SoundBible.com-1197162460.wav",  "id":"door_creak"},
     {"src": "110011__tuberatanka__cat-meow.wav", "id":"meow"}
   ],
   "manifest": [
@@ -20,6 +21,9 @@
     {"src": "assets/castle_hallway.png",     "id":"castle_hallway"},
     {"src": "assets/castle_hallway_mask.png","id":"castle_hallway_mask"},
     {"src": "assets/castle_hallway_exits.png","id":"castle_hallway_exits"},
+    
+    {"src": "assets/throne.png",     "id":"throne"},
+    {"src": "assets/throne_mask.png","id":"throne_mask"},
 
     {"src": "assets/castle_door_door.png",   "id":"castle_door_door"},
     {"src": "assets/castle_door_door_mask.png",   "id":"castle_door_door_mask"},
@@ -63,7 +67,8 @@
       "obstacles": [
         {"image": "castle_door_door",
          "mask": "castle_door_door_mask",
-         "key": "castle_key"
+         "key": "castle_key",
+         "sound": "door_creak"
          }
       ],
       "items": [
@@ -84,8 +89,22 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
+        {"value": "186", "level":"throne", "x":"150", "y":"160"},
         {"value": "255", "level":"castle_door", "x":"150", "y":"107"}
       ]
+    },
+
+    { "image": "throne", 
+      "music": "arcadia",
+      "mask": "throne_mask", 
+      "obstacles": [
+      ],
+      "items": [
+      ],
+      "exits": "",
+      "connections": [
+      ]
     }
+
   ]
 }

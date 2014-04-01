@@ -121,6 +121,7 @@ function Obstacle(json_data) {
   this.key = json.key;
   this.container = new createjs.Container();
   this.mask_container = new createjs.Container();
+  this.sound = json.sound;
 
   console.log("Obstacle");
   var mask = makeBitmap(json.mask, true);
@@ -210,6 +211,7 @@ function Level(json_data) {
           (y > ob.container.y - 10) && (y < ob.container.y + ob.container.getBounds().height)) {
         if (item.name === ob.key) {
           console.log("used item " + item.name + " in " + ob.name); 
+          createjs.Sound.play(ob.sound); //, createjs.Sound.INTERUPT_LATE);
           obstacles.splice(i, 1);
           this.mask_container.removeChild(ob.mask_container);
           this.container.removeChild(ob.container);
@@ -348,8 +350,9 @@ function Cat(x, y, container) {
     console.log("meow");
     leg1.rotation = 90;
     if (use_sound)
-      createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
-   
+      var inst = createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
+      inst.volume = 0.3;
+
       if (item === null) {
         item = level.getItem(cont.x, cont.y);
         if (item !== null) {
@@ -544,6 +547,7 @@ function manageMusic() {
  
   if (music_inst == null) {
     music_inst = createjs.Sound.play(song, { loop:-1 } );
+    music_inst.volume = 0.25;
     console.log(song + " " + music_inst.playState);
   }
   music_complete = true;
