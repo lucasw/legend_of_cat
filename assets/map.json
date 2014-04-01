@@ -14,6 +14,7 @@
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
     {"src": "assets/level_test_exits.png",   "id":"level_test_exits"},
     {"src": "assets/castle_door_door.png",   "id":"castle_door_door"},
+    {"src": "assets/castle_door_door_mask.png",   "id":"castle_door_door_mask"},
     {"src": "assets/castle_door_dither.png", "id":"castle_door"},
     {"src": "assets/castle_door_mask.png",   "id":"castle_door_mask"},
     {"src": "assets/castle_door_exits.png",  "id":"castle_door_exits"}
@@ -46,7 +47,10 @@
       "music": "arcadia",
       "mask": "castle_door_mask", 
       "obstacles": [
-        {"image": "castle_door_door"}
+        {"image": "castle_door_door",
+         "mask": "castle_door_door_mask",
+         "key": "castle_key"
+         }
       ],
       "exits": "castle_door_exits",
       "connections": [

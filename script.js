@@ -49,7 +49,7 @@ function makeBitmap(asset_name, auto_scale) {
   var asset =  map_loader.getResult(asset_name);
   var bitmap = new createjs.Bitmap(asset);
   if (bitmap == null) return null;
-  //console.log(asset_name); // + " " + bitmap);
+  console.log(asset_name); // + " " + bitmap);
   var lwd2e = bitmap.getBounds().width;
   var lht2e = bitmap.getBounds().height;
   if (auto_scale) {
@@ -79,19 +79,56 @@ function Cloud(parent_container, x, y, scale) {
   return this;
 }
 
+  var getPixel = function(bitmap, x,y) {
+    if (bitmap == undefined) return 0;
+    //console.log(bitmap + " " + x + " " + y);
+    // TODO replace mask_scaleX/Y with something stored in bitmap
+    var test_x = x / bitmap.scaleX;
+    var test_y = y / bitmap.scaleY;
+    if (test_x < 0) return 0;
+    if (test_y < 0) return 0;
+    if (test_x >= bitmap.getBounds().width) return 0;
+    if (test_y >= bitmap.getBounds().height) return 0;
+
+    //console.log("get mask " + test_x + " " + test_y);
+    var data = bitmap.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
+    return data[0];
+  }
+
+function Obstacle(json_data) {
+  var json = json_data;
+  
+  this.container = new createjs.Container();
+  this.mask_container = new createjs.Container();
+
+  console.log("Obstacle");
+  var mask = makeBitmap(json.mask, true);
+  this.mask_container.addChild(mask);
+  var asset = makeBitmap(json.image, true);
+  this.container.addChild(asset);
+
+  this.getMask = function(x,y) {
+    var val = getPixel(mask, x, y);
+    return val;
+  }
+
+  return this;
+}
+
 function Level(json_data) {
   
   var json = json_data;
   this.name = json.image;
   
-  console.log("loading " + this.name + " " + json_data.exits + " " + json.exits);
+  console.log("Level");
+  this.mask_container = new createjs.Container();
   this.container = new createjs.Container();
   
   var exits = makeBitmap(json.exits,true);
   if (exits != null) this.container.addChild(exits);
   
   var mask = makeBitmap(json.mask,true); 
-  if (mask != null) this.container.addChild(mask);
+  if (mask != null) this.mask_container.addChild(mask);
 
   var bg_container = new createjs.Container();
   this.container.addChild(bg_container);
@@ -114,30 +151,24 @@ function Level(json_data) {
     }
   }
 
+  var obstacles = [];
   for (var i = 0; i < json.obstacles.length; i++) {
-    console.log(json.obstacles[i].image);
-    var asset = makeBitmap(json.obstacles[i].image,true);
-    this.container.addChild(asset);
-  }
-
-  var getPixel = function(bitmap, x,y) {
-    if (bitmap == undefined) return 0;
-    //console.log(bitmap + " " + x + " " + y);
-    // TODO replace mask_scaleX/Y with something stored in bitmap
-    var test_x = x / mask.scaleX;
-    var test_y = y / mask.scaleY;
-    if (test_x < 0) return 0;
-    if (test_y < 0) return 0;
-    if (test_x >= bitmap.getBounds().width) return 0;
-    if (test_y >= bitmap.getBounds().height) return 0;
-
-    //console.log("get mask " + test_x + " " + test_y);
-    var data = bitmap.cacheCanvas.getContext("2d").getImageData(test_x, test_y, 1, 1).data; 
-    return data[0];
+    var obstacle = new Obstacle(json.obstacles[i]);
+    this.mask_container.addChild(obstacle.mask_container); 
+    this.container.addChild(obstacle.container); 
+    obstacles.push(obstacle);
   }
 
   this.getMask = function(x,y) {
-    return getPixel(mask, x, y);
+    var val = getPixel(mask, x, y);
+    //console.log("val " + val);
+    for (var i = 0; i < obstacles.length; i++) {
+      var val_ob = obstacles[i].getMask(x,y);
+      // 128 is 'transparent'
+      if ((val_ob === undefined) || (val_ob !== 128)) val = val_ob;
+      //console.log(x + " " + y + " " + val_ob);
+    }
+    return val;
   }
 
   var getExit = function(x,y) {
