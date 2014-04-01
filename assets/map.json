@@ -10,6 +10,7 @@
     {"src": "assets/title_exits.png",  "id":"title_exits"},
     {"src": "assets/sky.png",    "id":"sky_blue"},
     {"src": "assets/cloud.png",  "id":"cloud"},
+    {"src": "assets/castle_key.png",  "id":"castle_key"},
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
     {"src": "assets/level_test_exits.png",   "id":"level_test_exits"},
@@ -27,6 +28,8 @@
       "mask": "title_mask",
       "obstacles": [
       ],
+      "items": [
+      ],
       "exits": "title_exits",
       "connections": [
         {"value": "150", "level":"level_test", "x":"150", "y":"140"}
@@ -37,6 +40,9 @@
       "music": "arcadia",
       "mask": "level_test_mask", 
       "obstacles": [
+      ],
+      "items": [
+        {"image": "castle_key", "x": "200", "y":"125" }
       ],
       "exits": "level_test_exits",
       "connections": [
@@ -51,6 +57,8 @@
          "mask": "castle_door_door_mask",
          "key": "castle_key"
          }
+      ],
+      "items": [
       ],
       "exits": "castle_door_exits",
       "connections": [

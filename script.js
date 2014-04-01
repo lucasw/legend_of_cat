@@ -95,6 +95,23 @@ function Cloud(parent_container, x, y, scale) {
     return data[0];
   }
 
+function Item(json_data, scale) {
+  var json = json_data;
+
+  this.container = new createjs.Container();
+  
+  var image = makeBitmap(json.image, false);
+  this.container.addChild(image); 
+  image.x = json.x * scale;
+  image.y = json.y * scale;
+
+  image.scaleX = scale;
+  image.scaleY = scale;
+
+  return this;
+}
+
+// TBD - maybe obstacles should just be items
 function Obstacle(json_data) {
   var json = json_data;
   
@@ -149,6 +166,13 @@ function Level(json_data) {
       var cloud = new Cloud(bg_container, x, y, lev.scaleX);
       clouds.push(cloud);
     }
+  }
+  
+  var items = [];
+  for (var i = 0; i < json.items.length; i++) {
+    var item = new Item(json.items[i], lev.scaleX);
+    this.container.addChild(item.container);
+    items.push(item);
   }
 
   var obstacles = [];
