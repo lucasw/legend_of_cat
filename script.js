@@ -117,7 +117,8 @@ function Item(json_data, scale) {
 // TBD - maybe obstacles should just be items
 function Obstacle(json_data) {
   var json = json_data;
-  
+  this.name = json.image; 
+  this.key = json.key;
   this.container = new createjs.Container();
   this.mask_container = new createjs.Container();
 
@@ -202,10 +203,29 @@ function Level(json_data) {
   }
 
   this.putItem = function(item, x, y) {
-    this.container.addChild(item.container); 
-    items.push(item);
-    item.container.x = x;
-    item.container.y = y;
+    var used_item = false;
+    for (var i = 0; i < obstacles.length; i++) {
+      var ob = obstacles[i];
+      if ((x > ob.container.x - 10) && (x < ob.container.x + ob.container.getBounds().width) &&
+          (y > ob.container.y - 10) && (y < ob.container.y + ob.container.getBounds().height)) {
+        if (item.name === ob.key) {
+          console.log("used item " + item.name + " in " + ob.name); 
+          obstacles.splice(i, 1);
+          this.mask_container.removeChild(ob.mask_container);
+          this.container.removeChild(ob.container);
+          used_item = true;
+          break;
+        }
+      }
+    
+    }
+
+    if (!used_item) {
+      this.container.addChild(item.container); 
+      items.push(item);
+      item.container.x = x;
+      item.container.y = y;
+    }
   }
   
   this.getMask = function(x,y) {
