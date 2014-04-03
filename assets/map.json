@@ -96,10 +96,12 @@
 
     { 
       "name": "hall0",
-      "image": "castle_hallway", 
+      "layers": [
+        { "image": "castle_hallway",    "value": "245" },
+        { "image": "castle_hallway_fg", "value": "255" }
+      ],
       "music": "arcadia",
       "mask": "castle_hallway_mask", 
-      "fg" : "castle_hallway_fg",
       "obstacles": [
       ],
       "items": [
@@ -116,10 +118,12 @@
 
     { 
       "name": "hall1",
-      "image": "castle_hallway", 
+      "layers": [
+        { "image": "castle_hallway",    "value": "245" },
+        { "image": "castle_hallway_fg", "value": "255" }
+      ],
       "music": "arcadia",
       "mask": "castle_hallway_mask", 
-      "fg" : "castle_hallway_fg",
       "obstacles": [
         { 
          "image": "castle_hallway_door_front",
@@ -141,10 +145,12 @@
 
     { 
       "name": "hall2",
-      "image": "castle_hallway", 
+      "layers": [
+        { "image": "castle_hallway",    "value": "245" },
+        { "image": "castle_hallway_fg", "value": "255" }
+      ],
       "music": "arcadia",
       "mask": "castle_hallway_mask", 
-      "fg" : "castle_hallway_fg",
       "obstacles": [
         { 
           "image": "castle_hallway_door_front",
@@ -165,7 +171,10 @@
 
     { 
       "name": "hall3",
-      "image": "castle_hallway", 
+      "layers": [
+        { "image": "castle_hallway",    "value": "245" },
+        { "image": "castle_hallway_fg", "value": "255" }
+      ],
       "music": "arcadia",
       "mask": "castle_hallway_mask", 
       "fg" : "castle_hallway_fg",
@@ -189,10 +198,12 @@
 
     { 
       "name": "hall4",
-      "image": "castle_hallway", 
+      "layers": [
+        { "image": "castle_hallway",    "value": "245" },
+        { "image": "castle_hallway_fg", "value": "255" }
+      ],
       "music": "arcadia",
       "mask": "castle_hallway_mask", 
-      "fg" : "castle_hallway_fg",
       "obstacles": [
         { 
          "image": "castle_hallway_door_left",
@@ -203,14 +214,16 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"name": "right", "value": "148", "level":"hall1", "x":"80",  "y":"160"},
+        {"name": "right", "value": "148", "level":"hall1",  "x":"80",  "y":"160"},
         {"name": "up",    "value": "186", "level":"throne", "x":"150", "y":"160"}
       ]
     },
 
     { 
       "name": "throne",
-      "image": "throne", 
+      "layers": [
+        { "image": "throne", "value": "255" }
+      ],
       "music": "arcadia",
       "mask": "throne_mask", 
       "obstacles": [

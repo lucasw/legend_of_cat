@@ -54,7 +54,7 @@ function makeBitmap(asset_name, auto_scale) {
     console.log("bad file " + asset_name);
     return null;
   }
-  console.log(asset_name  + " " + bitmap);
+  console.log("Bitmap: " + asset_name); //  + " " + bitmap);
   var lwd2e = bitmap.getBounds().width;
   var lht2e = bitmap.getBounds().height;
   if (auto_scale) {
@@ -66,7 +66,7 @@ function makeBitmap(asset_name, auto_scale) {
   return bitmap;
 }
 
-function Cloud(parent_container, x, y, scale) {
+function Cloud(parent_container, x, y) {
   var im = makeBitmap("cloud", false);
   //im.scaleX = scale;
   //im.scaleY = scale;
@@ -100,7 +100,7 @@ function Cloud(parent_container, x, y, scale) {
     return data[0];
   }
 
-function Item(json_data, scale) {
+function Item(json_data) {
   var json = json_data;
   
   this.name = json.image;
@@ -108,8 +108,8 @@ function Item(json_data, scale) {
   
   var image = makeBitmap(json.image, false);
   this.container.addChild(image); 
-  this.container.x = json.x * scale;
-  this.container.y = json.y * scale;
+  this.container.x = json.x; // * scale;
+  this.container.y = json.y; // * scale;
   image.regX = image.getBounds().width/2;
   image.regY = image.getBounds().height/2;
   //image.scaleX = scale;
@@ -152,37 +152,37 @@ function Level(json_data) {
   
   var exits = makeBitmap(json.exits,true);
   if (exits != null) this.container.addChild(exits);
-  
+    
   var mask = makeBitmap(json.mask,true); 
   if (mask != null) this.mask_container.addChild(mask);
 
-  var bg_container = new createjs.Container();
-  this.container.addChild(bg_container);
-  var bg = makeBitmap(json.bg,true);
-  if (bg != null) bg_container.addChild(bg);
+  var layers = [];
+  if (json.layers) {
+  for (var i = 0; i < json.layers.length; i++) {
+    var layer_container = new createjs.Container();
+    this.container.addChild(layer_container);
+    layers.push(layer_container);
 
-  var lev = makeBitmap(json.image,true);
-  this.container.addChild(lev);
-
-  this.fg_container = new createjs.Container();
-  var fg = makeBitmap(json.fg,true);
-  if (fg != null) this.fg_container.addChild(fg);
+    var bitmap = makeBitmap(json.layers[i].image, true);
+    if (bitmap != null) layer_container.addChild(bitmap);
+  }
+  }
 
   var clouds = [];
-  if (json.clouds > 0) {
+  if (false) { //json.clouds > 0) {
     console.log("clouds " + this.name + " " + json.clouds);
 
     for (var i = 0; i < json.clouds; i++) {
       var x = wd * Math.random();
       var y = ht * 0.4 * Math.random();
-      var cloud = new Cloud(bg_container, x, y, lev.scaleX);
+      var cloud = new Cloud(layers[0], x, y); //, lev.scaleX);
       clouds.push(cloud);
     }
   }
   
   var items = [];
   for (var i = 0; i < json.items.length; i++) {
-    var item = new Item(json.items[i], lev.scaleX);
+    var item = new Item(json.items[i]);
     this.container.addChild(item.container);
     items.push(item);
   }
@@ -195,11 +195,23 @@ function Level(json_data) {
     obstacles.push(obstacle);
   }
 
+  this.getLayer = function(mask_val) {
+    for (var i = 0; i < json.layers.length; i++) {
+      console.log("get layer " + mask_val + " " + i + " " 
+          + json.layers[i].value +  " " + layers[i]);
+      if (mask_val == json.layers[i].value) {
+        console.log("sccuess");
+        return layers[i];
+      }
+    }
+    return null;
+  }
+
   this.getItem = function(x,y) {
     for (var i = 0; i < items.length; i++) {
       console.log(x + " " + y + ", " + items[i].container.x + " " + items[i].container.y);
-      if ((Math.abs(x - items[i].container.x) < 32 * lev.scaleX) && 
-          (Math.abs(y - items[i].container.y) < 32 * lev.scaleX)) {
+      if ((Math.abs(x - items[i].container.x) < 32) && 
+          (Math.abs(y - items[i].container.y) < 32)) {
         //console.log("got item");
         var got_item = items[i];
         items.splice(i, 1);
@@ -262,11 +274,9 @@ function Level(json_data) {
         console.log("going from " + level.name + " to " + levels[i].name + " " + 
             new_level.x + " " + new_level.y);
         stage.removeChild(level.container);
-        stage.removeChild(level.fg_container);
         level = levels[i];
         stage.addChildAt(level.container, 0);
         // Cat is at 1
-        stage.addChildAt(level.fg_container, 2);
         console.log(level.name);
         player_container.x = new_level.x * mask.scaleX;
         player_container.y = new_level.y * mask.scaleY;
@@ -304,8 +314,9 @@ function Level(json_data) {
   return this;
 }
 
-function Cat(x, y, container) {
-  
+function Cat(x, y) {
+ 
+  mask_val = 0;
   var cont = new createjs.Container();
   cont.x = x;
   cont.y = y;
@@ -313,7 +324,6 @@ function Cat(x, y, container) {
   //cont.scaleY = cont.scaleX;
   cont.regX = 16;
   cont.regY = 30;
-  container.addChild(cont);
 
   var legs1 = new createjs.Container();
   legs1.x = 6;
@@ -428,7 +438,20 @@ function Cat(x, y, container) {
       else if (legs1.x != 6) legs1.x = 6;
     }
       
-
+    var new_mask_val = level.getMask(cont.x, cont.y);
+    if (new_mask_val !== mask_val) {
+      // TBD test if undefined
+      var old_layer = level.getLayer(mask_val);
+      var new_layer = level.getLayer(new_mask_val);
+      if ((old_layer !== null) && (new_layer !== null)) old_layer.removeChild(cont);
+      if (new_layer !== null) new_layer.addChild(cont);
+      else {
+        console.log("ERROR new layer is null " + new_mask_val);
+      }
+      console.log(mask_val + " " + new_mask_val + ", " + old_layer + " " + new_layer);
+    
+      mask_val = new_mask_val;
+    }
   }
  
   var last_dx = 0;
@@ -444,7 +467,7 @@ function Cat(x, y, container) {
     if (dx > 0) cont.scaleX = -Math.abs(cont.scaleX);
     else if (dx < 0) cont.scaleX = Math.abs(cont.scaleX);
     
-    //console.log("dxy " + dx + " " + dy); 
+    //console.log("dxy " + dx + " " + dy);
     did_move = true;
     if ((dx === 0) && (dy === 0)) {
       did_move = false;
@@ -585,9 +608,8 @@ function mapHandleComplete() {
   stage.scaleX = scale;
   stage.scaleY = scale;
 
-  cat = new Cat(wd/2, 3.7*ht/4, stage); 
-  
-  stage.addChild(level.fg_container);
+  cat = new Cat(wd/2, 3.7*ht/4);
+  cat.update();
   
   stage.update();
   
