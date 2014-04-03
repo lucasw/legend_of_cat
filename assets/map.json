@@ -1,5 +1,5 @@
 {
-  "start_level": "castle_hallway",
+  "start_level": "hall0",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -7,20 +7,25 @@
     {"src": "110011__tuberatanka__cat-meow.wav", "id":"meow"}
   ],
   "manifest": [
-    {"src": "assets/title.png",  "id":"title"},
+    {"src": "assets/title.png",       "id":"title"},
     {"src": "assets/title_mask.png",  "id":"title_mask"},
-    {"src": "assets/title_exits.png",  "id":"title_exits"},
-    {"src": "assets/sky.png",    "id":"sky_blue"},
-    {"src": "assets/cloud.png",  "id":"cloud"},
+    {"src": "assets/title_exits.png", "id":"title_exits"},
+    {"src": "assets/sky.png",         "id":"sky_blue"},
+    {"src": "assets/cloud.png",       "id":"cloud"},
     {"src": "assets/castle_key.png",  "id":"castle_key"},
     
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
     {"src": "assets/level_test_exits.png",   "id":"level_test_exits"},
     
-    {"src": "assets/castle_hallway.png",     "id":"castle_hallway"},
-    {"src": "assets/castle_hallway_mask.png","id":"castle_hallway_mask"},
+    {"src": "assets/castle_hallway.png",      "id":"castle_hallway"},
+    {"src": "assets/castle_hallway_mask.png", "id":"castle_hallway_mask"},
     {"src": "assets/castle_hallway_exits.png","id":"castle_hallway_exits"},
+    {"src": "assets/castle_hallway_fg.png",   "id":"castle_hallway_fg"},
+    {"src": "assets/castle_hallway_door_left.png",      "id":"castle_hallway_door_left"},
+    {"src": "assets/castle_hallway_door_left_mask.png", "id":"castle_hallway_door_left_mask"},
+    {"src": "assets/castle_hallway_door_right.png",     "id":"castle_hallway_door_right"},
+    {"src": "assets/castle_hallway_door_right_mask.png","id":"castle_hallway_door_right_mask"},
     
     {"src": "assets/throne.png",     "id":"throne"},
     {"src": "assets/throne_mask.png","id":"throne_mask"},
@@ -32,7 +37,9 @@
     {"src": "assets/castle_door_exits.png",  "id":"castle_door_exits"}
   ],
   "levels": [
-    { "image": "title", 
+    { 
+      "name": "mountain_path",
+      "image": "title", 
       "bg": "sky_blue",
       "clouds": "5",
       "music": "arcadia",
@@ -43,10 +50,12 @@
       ],
       "exits": "title_exits",
       "connections": [
-        {"value": "150", "level":"level_test", "x":"150", "y":"140"}
+        {"value": "150", "level":"castle_path", "x":"150", "y":"140"}
       ]
     },
-    { "image": "level_test",  
+    { 
+      "image": "castle_path",  
+      "image": "level_test",  
       "bg": "sky_blue", 
       "music": "arcadia",
       "mask": "level_test_mask", 
@@ -61,40 +70,145 @@
       ]
     },
     
-    { "image": "castle_door", 
+    { 
+      "name": "castle_door",
+      "image": "castle_door", 
       "music": "arcadia",
       "mask": "castle_door_mask", 
       "obstacles": [
-        {"image": "castle_door_door",
-         "mask": "castle_door_door_mask",
-         "key": "castle_key",
-         "sound": "door_creak"
-         }
+        {
+          "image": "castle_door_door",
+          "mask": "castle_door_door_mask",
+          "key": "castle_key",
+          "sound": "door_creak"
+        }
       ],
       "items": [
       ],
       "exits": "castle_door_exits",
       "connections": [
-        {"value": "202", "level":"level_test", "x":"150", "y":"107"},
-        {"value": "102", "level":"castle_hallway", "x":"150", "y":"150"}
+        {"value": "202", "level":"castle_path", "x":"150", "y":"107"},
+        {"value": "102", "level":"hall0", "x":"150", "y":"150"}
       ]
     },
 
-    { "image": "castle_hallway", 
+    { 
+      "name": "hall0",
+      "image": "castle_hallway", 
       "music": "arcadia",
       "mask": "castle_hallway_mask", 
+      "fg" : "castle_hallway_fg",
       "obstacles": [
       ],
       "items": [
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"value": "186", "level":"throne", "x":"150", "y":"160"},
-        {"value": "255", "level":"castle_door", "x":"150", "y":"107"}
+        {"name": "left",  "value": "102", "level":"hall2", "x":"248", "y":"118"},
+        {"name": "up",    "value": "186", "level":"hall1", "x":"150", "y":"160"},
+        {"name": "right", "value": "148", "level":"hall3", "x":"80",  "y":"160"},
+        {"name": "down",  "value": "255", "level":"castle_door", "x":"150", "y":"107"}
       ]
     },
 
-    { "image": "throne", 
+
+    { 
+      "name": "hall1",
+      "image": "castle_hallway", 
+      "music": "arcadia",
+      "mask": "castle_hallway_mask", 
+      "fg" : "castle_hallway_fg",
+      "obstacles": [
+        { 
+         "image": "castle_hallway_door_front",
+          "mask": "castle_hallway_door_front_mask"
+        },
+        { 
+          "image": "castle_hallway_door_right",
+          "mask" : "castle_hallway_door_right_mask"
+        }
+      ],
+      "items": [
+      ],
+      "exits": "castle_hallway_exits",
+      "connections": [
+        {"name": "left", "value": "102", "level":"hall4", "x":"248", "y":"118"},
+        {"name": "down", "value": "255", "level":"hall0", "x":"150", "y":"107"}
+      ]
+    },
+
+    { 
+      "name": "hall2",
+      "image": "castle_hallway", 
+      "music": "arcadia",
+      "mask": "castle_hallway_mask", 
+      "fg" : "castle_hallway_fg",
+      "obstacles": [
+        { 
+          "image": "castle_hallway_door_front",
+          "mask" : "castle_hallway_door_front_mask"
+        },
+        { 
+          "image": "castle_hallway_door_left",
+          "mask" : "castle_hallway_door_left_mask"
+        }
+      ],
+      "items": [
+      ],
+      "exits": "castle_hallway_exits",
+      "connections": [
+        {"name": "right", "value": "148", "level":"hall0", "x":"80",  "y":"160"}
+      ]
+    },
+
+    { 
+      "name": "hall3",
+      "image": "castle_hallway", 
+      "music": "arcadia",
+      "mask": "castle_hallway_mask", 
+      "fg" : "castle_hallway_fg",
+      "obstacles": [
+        { 
+          "image": "castle_hallway_door_front",
+          "mask" : "castle_hallway_door_front_mask"
+        },
+        { 
+         "image": "castle_hallway_door_right",
+          "mask" : "castle_hallway_door_right_mask"
+        }
+      ],
+      "items": [
+      ],
+      "exits": "castle_hallway_exits",
+      "connections": [
+        {"name": "left",  "value": "102", "level":"hall0", "x":"248", "y":"118"}
+      ]
+    },
+
+    { 
+      "name": "hall4",
+      "image": "castle_hallway", 
+      "music": "arcadia",
+      "mask": "castle_hallway_mask", 
+      "fg" : "castle_hallway_fg",
+      "obstacles": [
+        { 
+         "image": "castle_hallway_door_left",
+          "mask" : "castle_hallway_door_left_mask"
+        }
+      ],
+      "items": [
+      ],
+      "exits": "castle_hallway_exits",
+      "connections": [
+        {"name": "right", "value": "148", "level":"hall1", "x":"80",  "y":"160"},
+        {"name": "up",    "value": "186", "level":"throne", "x":"150", "y":"160"}
+      ]
+    },
+
+    { 
+      "name": "throne",
+      "image": "throne", 
       "music": "arcadia",
       "mask": "throne_mask", 
       "obstacles": [

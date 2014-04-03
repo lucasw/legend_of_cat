@@ -49,8 +49,12 @@ function makeBitmap(asset_name, auto_scale) {
 
   var asset =  map_loader.getResult(asset_name);
   var bitmap = new createjs.Bitmap(asset);
-  if (bitmap == null) return null;
-  console.log(asset_name); // + " " + bitmap);
+  if (bitmap === null) return null;
+  if (bitmap.getBounds() === null) {
+    console.log("bad file " + asset_name);
+    return null;
+  }
+  console.log(asset_name  + " " + bitmap);
   var lwd2e = bitmap.getBounds().width;
   var lht2e = bitmap.getBounds().height;
   if (auto_scale) {
@@ -140,7 +144,7 @@ function Obstacle(json_data) {
 function Level(json_data) {
   
   var json = json_data;
-  this.name = json.image;
+  this.name = json.name;
   
   console.log("Level");
   this.mask_container = new createjs.Container();
@@ -154,12 +158,15 @@ function Level(json_data) {
 
   var bg_container = new createjs.Container();
   this.container.addChild(bg_container);
-
   var bg = makeBitmap(json.bg,true);
   if (bg != null) bg_container.addChild(bg);
 
   var lev = makeBitmap(json.image,true);
   this.container.addChild(lev);
+
+  this.fg_container = new createjs.Container();
+  var fg = makeBitmap(json.fg,true);
+  if (fg != null) this.fg_container.addChild(fg);
 
   var clouds = [];
   if (json.clouds > 0) {
@@ -253,8 +260,11 @@ function Level(json_data) {
         console.log("going from " + level.name + " to " + levels[i].name + " " + 
             new_level.x + " " + new_level.y);
         stage.removeChild(level.container);
+        stage.removeChild(level.fg_container);
         level = levels[i];
         stage.addChildAt(level.container, 0);
+        // Cat is at 1
+        stage.addChildAt(level.fg_container, 2);
         console.log(level.name);
         player_container.x = new_level.x * mask.scaleX;
         player_container.y = new_level.y * mask.scaleY;
@@ -574,6 +584,9 @@ function mapHandleComplete() {
   stage.scaleY = scale;
 
   cat = new Cat(wd/2, 3.7*ht/4, stage); 
+  
+  stage.addChild(level.fg_container);
+  
   stage.update();
   
   startTicker();
