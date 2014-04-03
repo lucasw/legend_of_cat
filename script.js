@@ -127,7 +127,7 @@ function Obstacle(json_data) {
   this.mask_container = new createjs.Container();
   this.sound = json.sound;
 
-  console.log("Obstacle");
+  //console.log("Obstacle " + this.name);
   var mask = makeBitmap(json.mask, true);
   this.mask_container.addChild(mask);
   var asset = makeBitmap(json.image, true);
@@ -239,12 +239,14 @@ function Level(json_data) {
   
   this.getMask = function(x,y) {
     var val = getPixel(mask, x, y);
-    //console.log("val " + val);
+    //console.log("val " + val + ", " + obstacles.length);
     for (var i = 0; i < obstacles.length; i++) {
       var val_ob = obstacles[i].getMask(x,y);
       // 128 is 'transparent'
-      if ((val_ob === undefined) || (val_ob !== 128)) val = val_ob;
-      //console.log(x + " " + y + " " + val_ob);
+      if ((val_ob !== undefined) && (val_ob !== 128)) {
+        val = val_ob;
+        //console.log(val_ob.name + " " + i + " " + x + " " + y + " " + val_ob);
+      }
     }
     return val;
   }

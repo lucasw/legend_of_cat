@@ -26,6 +26,8 @@
     {"src": "assets/castle_hallway_door_left_mask.png", "id":"castle_hallway_door_left_mask"},
     {"src": "assets/castle_hallway_door_right.png",     "id":"castle_hallway_door_right"},
     {"src": "assets/castle_hallway_door_right_mask.png","id":"castle_hallway_door_right_mask"},
+    {"src": "assets/castle_hallway_door_front.png",     "id":"castle_hallway_door_front"},
+    {"src": "assets/castle_hallway_door_front_mask.png","id":"castle_hallway_door_front_mask"},
     
     {"src": "assets/throne.png",     "id":"throne"},
     {"src": "assets/throne_mask.png","id":"throne_mask"},
