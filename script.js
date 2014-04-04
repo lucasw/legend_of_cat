@@ -187,24 +187,28 @@ function Level(json_data) {
     items.push(item);
   }
 
-  var obstacles = [];
-  for (var i = 0; i < json.obstacles.length; i++) {
-    var obstacle = new Obstacle(json.obstacles[i]);
-    this.mask_container.addChild(obstacle.mask_container); 
-    this.container.addChild(obstacle.container); 
-    obstacles.push(obstacle);
-  }
-
   this.getLayer = function(mask_val) {
+    if (json.layers === undefined) return null;
     for (var i = 0; i < json.layers.length; i++) {
-      console.log("get layer " + mask_val + " " + i + " " 
-          + json.layers[i].value +  " " + layers[i]);
+      //console.log("get layer " + mask_val + " " + i + " " 
+      //    + json.layers[i].value +  " " + layers[i]);
       if (mask_val == json.layers[i].value) {
-        console.log("sccuess");
         return layers[i];
       }
     }
     return null;
+  }
+
+  var obstacles = [];
+  for (var i = 0; i < json.obstacles.length; i++) {
+    var obstacle = new Obstacle(json.obstacles[i]);
+    this.mask_container.addChild(obstacle.mask_container); 
+    //this.container.addChild(obstacle.container); 
+    var layer = this.getLayer(json.obstacles[i].value);
+    if (layer !== null) {
+      layer.addChild(obstacle.container);
+      obstacles.push(obstacle);
+    }
   }
 
   this.getItem = function(x,y) {
@@ -274,12 +278,13 @@ function Level(json_data) {
         console.log("going from " + level.name + " to " + levels[i].name + " " + 
             new_level.x + " " + new_level.y);
         stage.removeChild(level.container);
+
         level = levels[i];
         stage.addChildAt(level.container, 0);
         // Cat is at 1
-        console.log(level.name);
-        player_container.x = new_level.x * mask.scaleX;
-        player_container.y = new_level.y * mask.scaleY;
+        player_container.x = new_level.x;
+        player_container.y = new_level.y;
+        cat.level_transition = true;
         return true;
       }
     }
@@ -393,7 +398,9 @@ function Cat(x, y) {
         leg1.rotation = 0;
     }
   }
-
+  
+  var cur_layer = null;
+  this.level_transition = false;
   var counter = 0;
   this.update = function() {
   
@@ -431,7 +438,7 @@ function Cat(x, y) {
       if (head.y == -2) head.y = -3;
       else if (head.y == -3) head.y = -2;
     }
-  }
+  } // did move
     
     if (Math.random() < 0.01) {
       if (legs1.x == 6) legs1.x = 5;
@@ -439,21 +446,25 @@ function Cat(x, y) {
     }
       
     var new_mask_val = level.getMask(cont.x, cont.y);
-    if (new_mask_val !== mask_val) {
+    if ((new_mask_val !== mask_val) || (this.level_transition)) {
       // TBD test if undefined
-      var old_layer = level.getLayer(mask_val);
       var new_layer = level.getLayer(new_mask_val);
-      if ((old_layer !== null) && (new_layer !== null)) old_layer.removeChild(cont);
-      if (new_layer !== null) new_layer.addChild(cont);
-      else {
+      if (new_layer !== null) {
+        if (cur_layer !== null) cur_layer.removeChild(cont);
+        console.log("went to new layer " + new_mask_val + " on " + level.name);
+        new_layer.addChild(cont);
+        this.level_transition = false;
+      } else {
         console.log("ERROR new layer is null " + new_mask_val);
       }
-      console.log(mask_val + " " + new_mask_val + ", " + old_layer + " " + new_layer);
-    
+      console.log(mask_val + " " + new_mask_val + ", " + cur_layer + " " + new_layer);
+   
+      cur_layer = new_layer;
       mask_val = new_mask_val;
     }
-  }
- 
+  } // Cat update
+  
+
   var last_dx = 0;
   var last_dy = 0;
 

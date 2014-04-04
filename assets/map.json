@@ -12,7 +12,9 @@
     {"src": "assets/title_exits.png", "id":"title_exits"},
     {"src": "assets/sky.png",         "id":"sky_blue"},
     {"src": "assets/cloud.png",       "id":"cloud"},
+    
     {"src": "assets/castle_key.png",  "id":"castle_key"},
+    {"src": "assets/hammer.png",  "id":"hammer"},
     
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
@@ -23,6 +25,7 @@
     {"src": "assets/castle_hallway_exits.png","id":"castle_hallway_exits"},
     {"src": "assets/castle_hallway_fg.png",   "id":"castle_hallway_fg"},
     {"src": "assets/castle_hallway_door_left.png",      "id":"castle_hallway_door_left"},
+    {"src": "assets/castle_hallway_door_left_cracked.png",      "id":"castle_hallway_door_left_cracked"},
     {"src": "assets/castle_hallway_door_left_mask.png", "id":"castle_hallway_door_left_mask"},
     {"src": "assets/castle_hallway_door_right.png",     "id":"castle_hallway_door_right"},
     {"src": "assets/castle_hallway_door_right_mask.png","id":"castle_hallway_door_right_mask"},
@@ -82,7 +85,8 @@
           "image": "castle_door_door",
           "mask": "castle_door_door_mask",
           "key": "castle_key",
-          "sound": "door_creak"
+          "sound": "door_creak",
+          "value": "255"
         }
       ],
       "items": [
@@ -108,7 +112,7 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"name": "left",  "value": "102", "level":"hall2", "x":"248", "y":"118"},
+        {"name": "left",  "value": "102", "level":"hall2", "x":"238", "y":"118"},
         {"name": "up",    "value": "186", "level":"hall1", "x":"150", "y":"160"},
         {"name": "right", "value": "148", "level":"hall3", "x":"80",  "y":"160"},
         {"name": "down",  "value": "255", "level":"castle_door", "x":"150", "y":"107"}
@@ -127,11 +131,13 @@
       "obstacles": [
         { 
          "image": "castle_hallway_door_front",
-          "mask": "castle_hallway_door_front_mask"
+          "mask": "castle_hallway_door_front_mask",
+          "value": "245"
         },
         { 
           "image": "castle_hallway_door_right",
-          "mask" : "castle_hallway_door_right_mask"
+          "mask" : "castle_hallway_door_right_mask",
+          "value": "245"
         }
       ],
       "items": [
@@ -154,11 +160,13 @@
       "obstacles": [
         { 
           "image": "castle_hallway_door_front",
-          "mask" : "castle_hallway_door_front_mask"
+          "mask" : "castle_hallway_door_front_mask",
+          "value": "245"
         },
         { 
-          "image": "castle_hallway_door_left",
-          "mask" : "castle_hallway_door_left_mask"
+          "image": "castle_hallway_door_left_cracked",
+          "mask" : "castle_hallway_door_left_mask",
+          "value": "245"
         }
       ],
       "items": [
@@ -181,11 +189,13 @@
       "obstacles": [
         { 
           "image": "castle_hallway_door_front",
-          "mask" : "castle_hallway_door_front_mask"
+          "mask" : "castle_hallway_door_front_mask",
+          "value": "245"
         },
         { 
          "image": "castle_hallway_door_right",
-          "mask" : "castle_hallway_door_right_mask"
+          "mask" : "castle_hallway_door_right_mask",
+          "value": "245"
         }
       ],
       "items": [
@@ -207,7 +217,8 @@
       "obstacles": [
         { 
          "image": "castle_hallway_door_left",
-          "mask" : "castle_hallway_door_left_mask"
+          "mask" : "castle_hallway_door_left_mask",
+          "value": "245"
         }
       ],
       "items": [
