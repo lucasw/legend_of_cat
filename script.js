@@ -155,6 +155,7 @@ function Level(json_data) {
     
   var mask = makeBitmap(json.mask,true); 
   if (mask != null) this.mask_container.addChild(mask);
+  this.container.addChild(this.mask_container);
 
   var layers = [];
   if (json.layers) {
@@ -255,13 +256,17 @@ function Level(json_data) {
   
   this.getMask = function(x,y) {
     var val = getPixel(mask, x, y);
-    //console.log("val " + val + ", " + obstacles.length);
+    console.log(name + " val " + val + ", " + obstacles.length);
     for (var i = 0; i < obstacles.length; i++) {
       var val_ob = obstacles[i].getMask(x,y);
+      //if (val_ob.name === undefined) {
+      //  console.log("ERROR " + i + " " + val_ob + " undefined");
+      //}
+      //else 
       // 128 is 'transparent'
       if ((val_ob !== undefined) && (val_ob !== 128)) {
         val = val_ob;
-        //console.log(val_ob.name + " " + i + " " + x + " " + y + " " + val_ob);
+        console.log(obstacles[i].name + " " + i + " " + x + " " + y + " " + val_ob);
       }
     }
     return val;
@@ -278,7 +283,6 @@ function Level(json_data) {
         console.log("going from " + level.name + " to " + levels[i].name + " " + 
             new_level.x + " " + new_level.y);
         stage.removeChild(level.container);
-
         level = levels[i];
         stage.addChildAt(level.container, 0);
         // Cat is at 1
@@ -470,6 +474,7 @@ function Cat(x, y) {
 
   this.testMove = function(dx, dy) {
     var pix = level.getMask(cont.x + dx, cont.y + dy);
+    console.log(pix + " " + cont.x + " " + cont.y + " " + level.name);
     return (pix > 128);
   }
 
@@ -495,7 +500,8 @@ function Cat(x, y) {
     } else {
       did_move = false;
     }
-    
+   
+    //console.log(did_move + " " + dx + " " + dy + ", " + cont.x + " " + cont.y + " " + level.name);
     //console.log(did_move + " " + dx + " " + last_dx);
     // console.log("pix " + new_x + " " + new_y + " " + pix[0]);
 
