@@ -256,7 +256,7 @@ function Level(json_data) {
   
   this.getMask = function(x,y) {
     var val = getPixel(mask, x, y);
-    console.log(name + " val " + val + ", " + obstacles.length);
+    //console.log(name + " val " + val + ", " + obstacles.length);
     for (var i = 0; i < obstacles.length; i++) {
       var val_ob = obstacles[i].getMask(x,y);
       //if (val_ob.name === undefined) {
@@ -266,7 +266,9 @@ function Level(json_data) {
       // 128 is 'transparent'
       if ((val_ob !== undefined) && (val_ob !== 128)) {
         val = val_ob;
-        console.log(obstacles[i].name + " " + i + " " + x + " " + y + " " + val_ob);
+        console.log(y);
+        console.log("obstacle " + obstacles[i].name + " " + i + " : " 
+            + x + " " + y + ", " + val_ob);
       }
     }
     return val;
@@ -286,8 +288,8 @@ function Level(json_data) {
         level = levels[i];
         stage.addChildAt(level.container, 0);
         // Cat is at 1
-        player_container.x = new_level.x;
-        player_container.y = new_level.y;
+        player_container.x = parseInt(new_level.x);
+        player_container.y = parseInt(new_level.y);
         cat.level_transition = true;
         return true;
       }
@@ -459,7 +461,7 @@ function Cat(x, y) {
         new_layer.addChild(cont);
         this.level_transition = false;
       } else {
-        console.log("ERROR new layer is null " + new_mask_val);
+        console.log("ERROR new layer on " + level.name + " is null " + new_mask_val + " " + cont.x + " " + cont.y);
       }
       console.log(mask_val + " " + new_mask_val + ", " + cur_layer + " " + new_layer);
    
@@ -473,13 +475,19 @@ function Cat(x, y) {
   var last_dy = 0;
 
   this.testMove = function(dx, dy) {
-    var pix = level.getMask(cont.x + dx, cont.y + dy);
-    console.log(pix + " " + cont.x + " " + cont.y + " " + level.name);
+    // For some reason x + y was getting interpretted as string concatenation, there must
+    // be caller that is sending string like vars instead of ints?
+    var new_x = parseInt(cont.x) + parseInt(dx);
+    var new_y = parseInt(cont.y) + parseInt(dy);
+    var pix = level.getMask(new_x, new_y);
+    console.log(level.name + " mask val " + pix + " at " + new_x + " " + new_y + " ( " + cont.y + " + " + dy + " ) ");
     return (pix > 128);
   }
 
   var did_move = false;
   this.move = function(dx, dy) {
+    dx = parseInt(dx);
+    dy = parseInt(dy);
     if (dx > 0) cont.scaleX = -Math.abs(cont.scaleX);
     else if (dx < 0) cont.scaleX = Math.abs(cont.scaleX);
     
@@ -506,8 +514,8 @@ function Cat(x, y) {
     // console.log("pix " + new_x + " " + new_y + " " + pix[0]);
 
     if (did_move) {
-      cont.x += dx;
-      cont.y += dy;
+      cont.x = parseInt(cont.x) + parseInt(dx);
+      cont.y = parseInt(cont.y) + parseInt(dy);
       if (dx !== 0) last_dx = dx;
       if (dy !== 0) last_dy = dy;
     }

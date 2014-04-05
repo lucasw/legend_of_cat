@@ -1,5 +1,5 @@
 {
-  "start_level": "hall0",
+  "start_level": "hall3",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
