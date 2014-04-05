@@ -479,9 +479,11 @@ function Cat(x, y) {
     // be caller that is sending string like vars instead of ints?
     var new_x = parseInt(cont.x) + parseInt(dx);
     var new_y = parseInt(cont.y) + parseInt(dy);
-    var pix = level.getMask(new_x, new_y);
-    console.log(level.name + " mask val " + pix + " at " + new_x + " " + new_y + " ( " + cont.y + " + " + dy + " ) ");
-    return (pix > 128);
+    var pix_l = level.getMask(new_x - 13, new_y);
+    var pix_m = level.getMask(new_x + 0, new_y);
+    var pix_r = level.getMask(new_x + 13, new_y);
+    //console.log(level.name + " mask val " + pix + " at " + new_x + " " + new_y + " ( " + cont.y + " + " + dy + " ) ");
+    return ((pix_l > 128) && (pix_m > 128) && (pix_r > 128));
   }
 
   var did_move = false;

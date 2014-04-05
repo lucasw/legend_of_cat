@@ -1,5 +1,5 @@
 {
-  "start_level": "hall3",
+  "start_level": "castle_door",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -44,8 +44,10 @@
   "levels": [
     { 
       "name": "mountain_path",
-      "image": "title", 
-      "bg": "sky_blue",
+      "layers": [
+        { "image": "sky_blue", "value": "245" },
+        { "image": "title",    "value": "255" }
+      ],
       "clouds": "5",
       "music": "arcadia",
       "mask": "title_mask",
@@ -59,9 +61,11 @@
       ]
     },
     { 
-      "image": "castle_path",  
-      "image": "level_test",  
-      "bg": "sky_blue", 
+      "name": "castle_path",  
+      "layers": [
+        { "image": "sky_blue", "value": "245" },
+        { "image": "level_test", "value": "255" }
+      ],
       "music": "arcadia",
       "mask": "level_test_mask", 
       "obstacles": [
@@ -77,7 +81,9 @@
     
     { 
       "name": "castle_door",
-      "image": "castle_door", 
+      "layers" : [
+        { "image": "castle_door", "value": "255" } 
+      ],
       "music": "arcadia",
       "mask": "castle_door_mask", 
       "obstacles": [
@@ -114,7 +120,7 @@
       "connections": [
         {"name": "left",  "value": "102", "level":"hall2", "x":"238", "y":"118"},
         {"name": "up",    "value": "186", "level":"hall1", "x":"150", "y":"160"},
-        {"name": "right", "value": "148", "level":"hall3", "x":"90",  "y":"130"},
+        {"name": "right", "value": "148", "level":"hall3", "x":"70",  "y":"130"},
         {"name": "down",  "value": "255", "level":"castle_door", "x":"150", "y":"107"}
       ]
     },
@@ -173,7 +179,7 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"name": "right", "value": "148", "level":"hall0", "x":"80",  "y":"160"}
+        {"name": "right", "value": "148", "level":"hall0", "x":"70",  "y":"130"}
       ]
     },
 
@@ -225,7 +231,7 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"name": "right", "value": "148", "level":"hall1",  "x":"80",  "y":"160"},
+        {"name": "right", "value": "148", "level":"hall1",  "x":"70",  "y":"130"},
         {"name": "up",    "value": "186", "level":"throne", "x":"150", "y":"160"}
       ]
     },
