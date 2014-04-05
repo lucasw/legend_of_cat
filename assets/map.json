@@ -1,5 +1,5 @@
 {
-  "start_level": "mountain_path",
+  "start_level": "bridge_path",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -15,6 +15,11 @@
     
     {"src": "assets/castle_key.png",  "id":"castle_key"},
     {"src": "assets/hammer.png",  "id":"hammer"},
+    
+    {"src": "assets/bridge_path_split.png",  "id": "bridge_path_split" },
+    {"src": "assets/bridge_path_split_fg.png",  "id": "bridge_path_split_fg" },
+    {"src": "assets/bridge_path_split_exits.png",  "id": "bridge_path_split_exits" },
+    {"src": "assets/bridge_path_split_mask.png",  "id": "bridge_path_split_mask" },
     
     {"src": "assets/level_test_dither.png",  "id":"level_test"},
     {"src": "assets/level_test_mask.png",    "id":"level_test_mask"},
@@ -60,6 +65,7 @@
         {"value": "150", "level":"castle_path", "x":"150", "y":"164"}
       ]
     },
+    
     { 
       "name": "castle_path",  
       "layers": [
@@ -75,11 +81,29 @@
       ],
       "exits": "level_test_exits",
       "connections": [
-        {"value": "102", "level":"castle_door",   "x":"160", "y":"160"},
+        {"value": "102", "level":"bridge_path",   "x":"160", "y":"160"},
         {"value": "191", "level":"mountain_path", "x":"143", "y":"157"}
       ]
     },
     
+    {
+      "name": "bridge_path",
+      "layers": [
+        { "image": "bridge_path_split_fg", "value":"245" },
+        { "image": "bridge_path_split",    "value":"255" }
+      ],
+      "music": "arcadia",
+      "mask": "bridge_path_split_mask",
+      "items": [
+      ],
+      "exits": "bridge_path_split_exits",
+      "connections": [
+        {"value": "245", "level": "castle_door", "x":"160", "y":"160"},
+        {"value": "117", "level": "house", "x":"160", "y":"160"},
+        {"value": "163", "level": "castle_path", "x":"150", "y":"79"}
+      ]
+    },
+
     { 
       "name": "castle_door",
       "layers" : [
@@ -100,7 +124,7 @@
       ],
       "exits": "castle_door_exits",
       "connections": [
-        {"value": "202", "level":"castle_path", "x":"150", "y":"79"},
+        {"value": "202", "level":"bridge_path", "x":"42", "y":"30"},
         {"value": "102", "level":"hall0", "x":"150", "y":"150"}
       ]
     },

@@ -203,6 +203,7 @@ function Level(json_data) {
   }
 
   var obstacles = [];
+  if (json.obstacles !== undefined) {
   for (var i = 0; i < json.obstacles.length; i++) {
     var obstacle = new Obstacle(json.obstacles[i]);
     this.mask_container.addChild(obstacle.mask_container); 
@@ -212,6 +213,7 @@ function Level(json_data) {
       layer.addChild(obstacle.container);
       obstacles.push(obstacle);
     }
+  }
   }
 
   this.getItem = function(x,y) {
@@ -239,7 +241,7 @@ function Level(json_data) {
           var layer = this.getLayer(json.obstacles[i].value);
           if (layer !== null) {
             console.log("used item " + item.name + " in " + ob.name); 
-            createjs.Sound.play(ob.sound); //, createjs.Sound.INTERUPT_LATE);
+            createjs.Sound.play(ob.sound, delay= 200); //, createjs.Sound.INTERUPT_LATE);
             obstacles.splice(i, 1);
             layer.removeChild(ob.container);
             used_item = true;
