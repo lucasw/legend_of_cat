@@ -1,5 +1,5 @@
 {
-  "start_level": "castle_door",
+  "start_level": "mountain_path",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -57,7 +57,7 @@
       ],
       "exits": "title_exits",
       "connections": [
-        {"value": "150", "level":"castle_path", "x":"150", "y":"140"}
+        {"value": "150", "level":"castle_path", "x":"150", "y":"164"}
       ]
     },
     { 
@@ -75,7 +75,8 @@
       ],
       "exits": "level_test_exits",
       "connections": [
-        {"value": "102", "level":"castle_door", "x":"160", "y":"160"}
+        {"value": "102", "level":"castle_door",   "x":"160", "y":"160"},
+        {"value": "191", "level":"mountain_path", "x":"143", "y":"157"}
       ]
     },
     
@@ -99,7 +100,7 @@
       ],
       "exits": "castle_door_exits",
       "connections": [
-        {"value": "202", "level":"castle_path", "x":"150", "y":"107"},
+        {"value": "202", "level":"castle_path", "x":"150", "y":"79"},
         {"value": "102", "level":"hall0", "x":"150", "y":"150"}
       ]
     },

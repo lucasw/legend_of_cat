@@ -67,6 +67,7 @@ function makeBitmap(asset_name, auto_scale) {
 }
 
 function Cloud(parent_container, x, y) {
+  console.log("Cloud " + parent_container);
   var im = makeBitmap("cloud", false);
   //im.scaleX = scale;
   //im.scaleY = scale;
@@ -146,7 +147,7 @@ function Level(json_data) {
   var json = json_data;
   this.name = json.name;
   
-  console.log("Level");
+  console.log("Level " + this.name);
   this.mask_container = new createjs.Container();
   this.container = new createjs.Container();
   
@@ -162,21 +163,22 @@ function Level(json_data) {
   for (var i = 0; i < json.layers.length; i++) {
     var layer_container = new createjs.Container();
     this.container.addChild(layer_container);
+    console.log("Layer " + layers.length);
     layers.push(layer_container);
-
+    
     var bitmap = makeBitmap(json.layers[i].image, true);
     if (bitmap != null) layer_container.addChild(bitmap);
   }
   }
 
   var clouds = [];
-  if (false) { //json.clouds > 0) {
+  if (json.clouds > 0) {
     console.log("clouds " + this.name + " " + json.clouds);
 
     for (var i = 0; i < json.clouds; i++) {
       var x = wd * Math.random();
       var y = ht * 0.4 * Math.random();
-      var cloud = new Cloud(layers[0], x, y); //, lev.scaleX);
+      var cloud = new Cloud(layers[0], x, y); 
       clouds.push(cloud);
     }
   }
@@ -234,12 +236,14 @@ function Level(json_data) {
       if ((x > ob.container.x - 10) && (x < ob.container.x + ob.container.getBounds().width) &&
           (y > ob.container.y - 10) && (y < ob.container.y + ob.container.getBounds().height)) {
         if (item.name === ob.key) {
-          console.log("used item " + item.name + " in " + ob.name); 
-          createjs.Sound.play(ob.sound); //, createjs.Sound.INTERUPT_LATE);
-          obstacles.splice(i, 1);
-          this.mask_container.removeChild(ob.mask_container);
-          this.container.removeChild(ob.container);
-          used_item = true;
+          var layer = this.getLayer(json.obstacles[i].value);
+          if (layer !== null) {
+            console.log("used item " + item.name + " in " + ob.name); 
+            createjs.Sound.play(ob.sound); //, createjs.Sound.INTERUPT_LATE);
+            obstacles.splice(i, 1);
+            layer.removeChild(ob.container);
+            used_item = true;
+          }
           break;
         }
       }
