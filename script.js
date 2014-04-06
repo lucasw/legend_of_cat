@@ -434,11 +434,15 @@ function Cat(x, y) {
     }
 
     if (counter < 8) {
-      legs1.y = 16 - counter/3;
+      if (item === null) {
+        legs1.y = 16 - counter/3;
+      }
       legs2.y = 16 - 8/3 + counter/3;
     } else if (counter < 16) {
       c2 = counter - 8;
-      legs1.y = 16 - 8/3 + c2/3;
+      if (item === null) {
+        legs1.y = 16 - 8/3 + c2/3;
+      }
       legs2.y = 16 - c2/3;
     } else {
       counter = -1;

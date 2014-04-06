@@ -34,6 +34,10 @@
     {"src": "assets/forest_mask.png",  "id":"forest_mask"},
     {"src": "assets/forest_exits.png", "id":"forest_exits"},
     
+    {"src": "assets/doungeon.png",       "id":"doungeon"},
+    {"src": "assets/doungeon_mask.png",  "id":"doungeon_mask"},
+    {"src": "assets/doungeon_exits.png", "id":"doungeon_exits"},
+    
     {"src": "assets/wagon.png",       "id":"wagon"},
     {"src": "assets/wagon_isolated.png",       "id":"wagon_isolated"},
     {"src": "assets/wagon_mask.png",  "id":"wagon_mask"},
@@ -271,7 +275,7 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"name": "left",  "value": "102", "level":"dungeon", "x":"248", "y":"118"},
+        {"name": "left",  "value": "102", "level":"doungeon", "x":"160", "y":"160"},
         {"name": "right", "value": "148", "level":"hall0",   "x":"70",  "y":"130"}
       ]
     },
@@ -326,6 +330,27 @@
       "connections": [
         {"name": "right", "value": "148", "level":"hall1",  "x":"70",  "y":"130"},
         {"name": "up",    "value": "186", "level":"throne", "x":"150", "y":"160"}
+      ]
+    },
+
+    { 
+      "name": "doungeon",
+      "layers": [
+        { "image": "doungeon", "value": "255" }
+      ],
+      "music": "arcadia",
+      "mask": "doungeon_mask", 
+      "obstacles": [
+      ],
+      "items": [
+        {"image": "hammer", "value":"245", "x": "215", "y":"96" }
+      ],
+      "exits": "doungeon_exits",
+      "connections": [
+        {"name": "left",  "value": "84", "level":"cell0", "x":"238", "y":"118"},
+        {"name": "up",    "value": "150", "level":"cell1", "x":"150", "y":"160"},
+        {"name": "right", "value": "186", "level":"cell2", "x":"70",  "y":"130"},
+        {"name": "down",  "value": "54", "level":"hall2", "x":"82", "y":"124"}
       ]
     },
 
