@@ -611,7 +611,6 @@ function loadMusic() {
 }
 
 var music_inst = null;
-//var music_complete = false;
 //var map_complete = false;
 
 function soundHandleComplete() {
@@ -619,15 +618,23 @@ function soundHandleComplete() {
   loadMap();
 }
 
+var cur_song= "";
+
 function manageMusic() {
   var song = level.getSong();
- 
-  if (music_inst == null) {
+   
+  if (cur_song !== song) {
+    if (music_inst !== null) {
+      music_inst.stop();
+    }
     music_inst = createjs.Sound.play(song, { loop:-1 } );
     music_inst.volume = 0.25;
     console.log(song + " " + music_inst.playState);
+    cur_song = song;
+  } else {
+    
+
   }
-  music_complete = true;
 
 }
 
@@ -645,7 +652,6 @@ function mapHandleComplete() {
   }
 
   //level = levels[0];
-  manageMusic();
   stage.addChild(level.container);
   stage.scaleX = scale;
   stage.scaleY = scale;
@@ -681,6 +687,7 @@ function update() {
   // TODO update all levels if things can happen off-screen
   level.update();
 
+  manageMusic();
   cat.move(dx, dy);
   cat.update();
   

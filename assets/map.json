@@ -3,6 +3,7 @@
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
+    {"src": "music/Water Prelude.mp3",  "id":"water_prelude"},
     {"src": "Old Door Creaking-SoundBible.com-1197162460.wav",  "id":"door_creak"},
     {"src": "Crumbling-Mike_Koenig-1123041125.wav", "id":"crumbling"},
     {"src": "110011__tuberatanka__cat-meow.wav", "id":"meow"}
@@ -130,7 +131,7 @@
       "layers": [
         { "image": "house_front", "value":"255" }
       ],
-      "music": "arcadia",
+      "music": "water_prelude",
       "mask": "house_front_mask",
       "items": [
       ],
@@ -147,7 +148,7 @@
       "layers": [
         { "image": "house", "value":"255" }
       ],
-      "music": "arcadia",
+      "music": "water_prelude",
       "mask": "house_mask",
       "items": [
         {"image": "castle_key", "value":"255", "x": "200", "y":"125" }
@@ -163,7 +164,7 @@
       "layers": [
         { "image": "forest", "value":"255" }
       ],
-      "music": "arcadia",
+      "music": "water_prelude",
       "mask": "forest_mask",
       "items": [
       ],
@@ -180,7 +181,7 @@
         { "image": "wagon", "value":"245" },
         { "image": "wagon_isolated", "value":"255" }
       ],
-      "music": "arcadia",
+      "music": "water_prelude",
       "mask": "wagon_mask",
       "items": [
         {"image": "hammer", "value":"245", "x": "217", "y":"96" }
