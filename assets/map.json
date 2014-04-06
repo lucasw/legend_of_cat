@@ -1,9 +1,10 @@
 {
-  "start_level": "bridge_path",
+  "start_level": "hall0",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
     {"src": "Old Door Creaking-SoundBible.com-1197162460.wav",  "id":"door_creak"},
+    {"src": "Crumbling-Mike_Koenig-1123041125.wav", "id":"crumbling"},
     {"src": "110011__tuberatanka__cat-meow.wav", "id":"meow"}
   ],
   "manifest": [
@@ -28,6 +29,15 @@
     {"src": "assets/house_front.png",       "id":"house_front"},
     {"src": "assets/house_front_mask.png",  "id":"house_front_mask"},
     {"src": "assets/house_front_exits.png", "id":"house_front_exits"},
+    
+    {"src": "assets/forest.png",       "id":"forest"},
+    {"src": "assets/forest_mask.png",  "id":"forest_mask"},
+    {"src": "assets/forest_exits.png", "id":"forest_exits"},
+    
+    {"src": "assets/wagon.png",       "id":"wagon"},
+    {"src": "assets/wagon_isolated.png",       "id":"wagon_isolated"},
+    {"src": "assets/wagon_mask.png",  "id":"wagon_mask"},
+    {"src": "assets/wagon_exits.png", "id":"wagon_exits"},
     
     {"src": "assets/castle_hallway.png",      "id":"castle_hallway"},
     {"src": "assets/castle_hallway_mask.png", "id":"castle_hallway_mask"},
@@ -81,7 +91,7 @@
       "obstacles": [
       ],
       "items": [
-        {"image": "castle_key", "x": "200", "y":"125" }
+        {"image": "castle_key", "value":"255", "x": "200", "y":"125" }
       ],
       "exits": "level_test_exits",
       "connections": [
@@ -120,11 +130,44 @@
       "exits": "house_front_exits",
       "connections": [
         {"value": "117", "level": "forest", "x":"160", "y":"160"},
-        {"value": "117", "level": "house", "x":"160", "y":"160"},
+        {"value": "175", "level": "house", "x":"160", "y":"160"},
         {"value": "225", "level": "bridge_path", "x":"305", "y":"45"}
       ]
     },
+ 
+    {
+      "name": "forest",
+      "layers": [
+        { "image": "forest", "value":"255" }
+      ],
+      "music": "arcadia",
+      "mask": "forest_mask",
+      "items": [
+      ],
+      "exits": "forest_exits",
+      "connections": [
+        {"value": "245", "level": "wagon", "x":"19", "y":"154"},
+        {"value": "255", "level": "house_front", "x":"209", "y":"102"}
+      ]
+    },
 
+    {
+      "name": "wagon",
+      "layers": [
+        { "image": "wagon", "value":"245" },
+        { "image": "wagon_isolated", "value":"255" }
+      ],
+      "music": "arcadia",
+      "mask": "wagon_mask",
+      "items": [
+        {"image": "hammer", "value":"245", "x": "215", "y":"96" }
+      ],
+      "exits": "wagon_exits",
+      "connections": [
+        {"value": "255", "level": "forest", "x":"212", "y":"16"},
+        {"value": "182", "level": "waterfall_top", "x":"209", "y":"90"}
+      ]
+    },
     { 
       "name": "castle_door",
       "layers" : [
@@ -161,6 +204,7 @@
       "obstacles": [
       ],
       "items": [
+        {"image": "hammer", "value":"245", "x": "215", "y":"96" }
       ],
       "exits": "castle_hallway_exits",
       "connections": [
@@ -218,6 +262,8 @@
         { 
           "image": "castle_hallway_door_left_cracked",
           "mask" : "castle_hallway_door_left_mask",
+          "key":   "hammer",
+          "sound": "crumbling",
           "value": "245"
         }
       ],
@@ -225,7 +271,8 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"name": "right", "value": "148", "level":"hall0", "x":"70",  "y":"130"}
+        {"name": "left",  "value": "102", "level":"dungeon", "x":"248", "y":"118"},
+        {"name": "right", "value": "148", "level":"hall0",   "x":"70",  "y":"130"}
       ]
     },
 

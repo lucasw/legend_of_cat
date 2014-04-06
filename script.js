@@ -183,12 +183,6 @@ function Level(json_data) {
     }
   }
   
-  var items = [];
-  for (var i = 0; i < json.items.length; i++) {
-    var item = new Item(json.items[i]);
-    this.container.addChild(item.container);
-    items.push(item);
-  }
 
   this.getLayer = function(mask_val) {
     if (json.layers === undefined) return null;
@@ -202,12 +196,23 @@ function Level(json_data) {
     return null;
   }
 
+  var items = [];
+  for (var i = 0; i < json.items.length; i++) {
+    var item = new Item(json.items[i]);
+
+    var layer = this.getLayer(json.items[i].value);
+    if (layer !== null) {
+      layer.addChild(item.container);
+      items.push(item);
+    }
+
+  }
+  
   var obstacles = [];
   if (json.obstacles !== undefined) {
   for (var i = 0; i < json.obstacles.length; i++) {
     var obstacle = new Obstacle(json.obstacles[i]);
     this.mask_container.addChild(obstacle.mask_container); 
-    //this.container.addChild(obstacle.container); 
     var layer = this.getLayer(json.obstacles[i].value);
     if (layer !== null) {
       layer.addChild(obstacle.container);
