@@ -164,7 +164,7 @@
       "music": "arcadia",
       "mask": "wagon_mask",
       "items": [
-        {"image": "hammer", "value":"245", "x": "215", "y":"96" }
+        {"image": "hammer", "value":"245", "x": "217", "y":"96" }
       ],
       "exits": "wagon_exits",
       "connections": [
@@ -208,7 +208,6 @@
       "obstacles": [
       ],
       "items": [
-        {"image": "hammer", "value":"245", "x": "215", "y":"96" }
       ],
       "exits": "castle_hallway_exits",
       "connections": [
@@ -343,7 +342,6 @@
       "obstacles": [
       ],
       "items": [
-        {"image": "hammer", "value":"245", "x": "215", "y":"96" }
       ],
       "exits": "doungeon_exits",
       "connections": [
