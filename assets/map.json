@@ -1,5 +1,5 @@
 {
-  "start_level": "hall0",
+  "start_level": "house_front",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -29,6 +29,10 @@
     {"src": "assets/house_front.png",       "id":"house_front"},
     {"src": "assets/house_front_mask.png",  "id":"house_front_mask"},
     {"src": "assets/house_front_exits.png", "id":"house_front_exits"},
+    
+    {"src": "assets/house.png",       "id":"house"},
+    {"src": "assets/house_mask.png",  "id":"house_mask"},
+    {"src": "assets/house_exits.png", "id":"house_exits"},
     
     {"src": "assets/forest.png",       "id":"forest"},
     {"src": "assets/forest_mask.png",  "id":"forest_mask"},
@@ -95,7 +99,6 @@
       "obstacles": [
       ],
       "items": [
-        {"image": "castle_key", "value":"255", "x": "200", "y":"125" }
       ],
       "exits": "level_test_exits",
       "connections": [
@@ -135,10 +138,26 @@
       "connections": [
         {"value": "117", "level": "forest", "x":"160", "y":"160"},
         {"value": "175", "level": "house", "x":"160", "y":"160"},
-        {"value": "225", "level": "bridge_path", "x":"305", "y":"45"}
+        {"value": "225", "level": "bridge_path", "x":"289", "y":"45"}
       ]
     },
  
+    {
+      "name": "house",
+      "layers": [
+        { "image": "house", "value":"255" }
+      ],
+      "music": "arcadia",
+      "mask": "house_mask",
+      "items": [
+        {"image": "castle_key", "value":"255", "x": "200", "y":"125" }
+      ],
+      "exits": "house_exits",
+      "connections": [
+        {"value": "198", "level": "house_front", "x":"98", "y":"106"}
+      ]
+    },
+
     {
       "name": "forest",
       "layers": [
@@ -150,7 +169,7 @@
       ],
       "exits": "forest_exits",
       "connections": [
-        {"value": "245", "level": "wagon", "x":"19", "y":"154"},
+        {"value": "245", "level": "wagon", "x":"35", "y":"154"},
         {"value": "255", "level": "house_front", "x":"209", "y":"102"}
       ]
     },
