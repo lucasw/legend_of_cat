@@ -1,9 +1,12 @@
 {
-  "start_level": "wagon",
+  "start_level": "doungeon",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
     {"src": "music/Water Prelude.mp3",  "id":"water_prelude"},
+    {"src": "music/Enchanted Valley.mp3",  "id":"enchanted_valley"},
+    {"src": "music/The Path of the Goblin King.mp3",  "id":"goblin_king"},
+    {"src": "music/Video Dungeon Crawl.mp3",  "id":"video_dungeon"},
     {"src": "Old Door Creaking-SoundBible.com-1197162460.wav",  "id":"door_creak"},
     {"src": "Crumbling-Mike_Koenig-1123041125.wav", "id":"crumbling"},
     {"src": "203121__npeo__kitty-meow.wav",         "id":"kitty1"},
@@ -39,6 +42,10 @@
     {"src": "assets/house.png",       "id":"house"},
     {"src": "assets/house_mask.png",  "id":"house_mask"},
     {"src": "assets/house_exits.png", "id":"house_exits"},
+    
+    {"src": "assets/turret.png",       "id":"turret"},
+    {"src": "assets/turret_mask.png",  "id":"turret_mask"},
+    {"src": "assets/turret_exits.png", "id":"turret_exits"},
     
     {"src": "assets/forest.png",       "id":"forest"},
     {"src": "assets/forest_mask.png",  "id":"forest_mask"},
@@ -234,7 +241,7 @@
         { "image": "castle_hallway",    "value": "245" },
         { "image": "castle_hallway_fg", "value": "255" }
       ],
-      "music": "arcadia",
+      "music": "goblin_king",
       "mask": "castle_hallway_mask", 
       "obstacles": [
       ],
@@ -256,7 +263,7 @@
         { "image": "castle_hallway",    "value": "245" },
         { "image": "castle_hallway_fg", "value": "255" }
       ],
-      "music": "arcadia",
+      "music": "goblin_king",
       "mask": "castle_hallway_mask", 
       "obstacles": [
         { 
@@ -275,7 +282,7 @@
       "exits": "castle_hallway_exits",
       "connections": [
         {"name": "left", "value": "102", "level":"hall4", "x":"248", "y":"118"},
-        {"name": "down", "value": "255", "level":"hall0", "x":"150", "y":"107"}
+        {"name": "down", "value": "255", "level":"hall0", "x":"150", "y":"79"}
       ]
     },
 
@@ -285,7 +292,8 @@
         { "image": "castle_hallway",    "value": "245" },
         { "image": "castle_hallway_fg", "value": "255" }
       ],
-      "music": "arcadia",
+      "music": "goblin_king",
+      "mask": "castle_hallway_mask", 
       "mask": "castle_hallway_mask", 
       "obstacles": [
         { 
@@ -320,15 +328,9 @@
         { "image": "castle_hallway",    "value": "245" },
         { "image": "castle_hallway_fg", "value": "255" }
       ],
-      "music": "arcadia",
+      "music": "goblin_king",
       "mask": "castle_hallway_mask", 
-      "fg" : "castle_hallway_fg",
       "obstacles": [
-        { 
-          "image": "castle_hallway_door_front",
-          "mask" : "castle_hallway_door_front_mask",
-          "value": "245"
-        },
         { 
          "image": "castle_hallway_door_right",
           "mask" : "castle_hallway_door_right_mask",
@@ -339,17 +341,36 @@
       ],
       "exits": "castle_hallway_exits",
       "connections": [
-        {"name": "left",  "value": "102", "level":"hall0", "x":"248", "y":"118"}
+        {"name": "left",  "value": "102", "level":"hall0", "x":"248", "y":"118"},
+        {"name": "up",    "value": "186", "level":"turret", "x":"200", "y":"150"}
       ]
     },
 
+    { 
+      "name": "turret",
+      "layers": [
+        { "image": "castle_hallway",    "value": "245" },
+        { "image": "castle_hallway_fg", "value": "255" }
+      ],
+      "music": "enchanted_valley",
+      "mask": "castle_hallway_mask", 
+      "obstacles": [
+      ],
+      "items": [
+        {"image": "kitten", "value":"255", "x": "123", "y":"94", "sound":"kitty1" }
+      ],
+      "exits": "castle_hallway_exits",
+      "connections": [
+        {"name": "down",  "value": "150", "level":"hall3", "x":"150", "y":"79"}
+      ]
+    },
     { 
       "name": "hall4",
       "layers": [
         { "image": "castle_hallway",    "value": "245" },
         { "image": "castle_hallway_fg", "value": "255" }
       ],
-      "music": "arcadia",
+      "music": "goblin_king",
       "mask": "castle_hallway_mask", 
       "obstacles": [
         { 
@@ -372,12 +393,12 @@
       "layers": [
         { "image": "doungeon", "value": "255" }
       ],
-      "music": "arcadia",
+      "music": "video_dungeon",
       "mask": "doungeon_mask", 
       "obstacles": [
       ],
       "items": [
-        {"image": "kitten", "value":"245", "x": "123", "y":"94" }
+        {"image": "kitten", "value":"255", "x": "123", "y":"94", "sound":"kitty1" }
       ],
       "exits": "doungeon_exits",
       "connections": [
@@ -402,7 +423,7 @@
       ],
       "exits": "throne_exits",
       "connections": [
-        {"name": "down",  "value": "255", "level":"hall4", "x":"82", "y":"124"}
+        {"name": "down",  "value": "255", "level":"hall4", "x":"150", "y":"79"}
       ]
     }
 
