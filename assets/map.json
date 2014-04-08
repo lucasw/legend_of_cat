@@ -1,5 +1,5 @@
 {
-  "start_level": "doungeon",
+  "start_level": "hall0",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -349,17 +349,16 @@
     { 
       "name": "turret",
       "layers": [
-        { "image": "castle_hallway",    "value": "245" },
-        { "image": "castle_hallway_fg", "value": "255" }
+        { "image": "turret",    "value": "255" }
       ],
       "music": "enchanted_valley",
-      "mask": "castle_hallway_mask", 
+      "mask": "turret_mask", 
       "obstacles": [
       ],
       "items": [
         {"image": "kitten", "value":"255", "x": "123", "y":"94", "sound":"kitty1" }
       ],
-      "exits": "castle_hallway_exits",
+      "exits": "turret_exits",
       "connections": [
         {"name": "down",  "value": "150", "level":"hall3", "x":"150", "y":"79"}
       ]
