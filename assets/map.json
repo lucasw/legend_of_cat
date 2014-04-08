@@ -55,6 +55,10 @@
     {"src": "assets/waterfall_mask.png",  "id":"waterfall_mask"},
     {"src": "assets/waterfall_exits.png", "id":"waterfall_exits"},
     
+    {"src": "assets/cave.png",       "id":"cave"},
+    {"src": "assets/cave_mask.png",  "id":"cave_mask"},
+    {"src": "assets/cave_exits.png", "id":"cave_exits"},
+    
     {"src": "assets/doungeon.png",       "id":"doungeon"},
     {"src": "assets/doungeon_mask.png",  "id":"doungeon_mask"},
     {"src": "assets/doungeon_exits.png", "id":"doungeon_exits"},
@@ -224,7 +228,23 @@
       "exits": "waterfall_exits",
       "connections": [
         {"value": "255", "level": "wagon", "x":"295", "y":"142"},
-        {"value": "200", "level": "cave", "x":"209", "y":"102"}
+        {"value": "200", "level": "cave", "x":"32", "y":"139"}
+      ]
+    },
+
+    {
+      "name": "cave",
+      "layers": [
+        { "image": "cave", "value":"255" }
+      ],
+      "music": "water_prelude",
+      "mask": "cave_mask",
+      "items": [
+        {"image": "kitten", "value":"255", "x": "267", "y":"170", "sound":"kitty1" }
+      ],
+      "exits": "cave_exits",
+      "connections": [
+        {"value": "200", "level": "waterfall", "x":"123", "y":"87"}
       ]
     },
 
