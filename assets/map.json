@@ -9,6 +9,7 @@
     {"src": "music/Video Dungeon Crawl.mp3",  "id":"video_dungeon"},
     {"src": "Old Door Creaking-SoundBible.com-1197162460.wav",  "id":"door_creak"},
     {"src": "Crumbling-Mike_Koenig-1123041125.wav", "id":"crumbling"},
+    {"src": "231751__k06a__stone-and-cup-hit.wav",  "id":"stone"},
     {"src": "203121__npeo__kitty-meow.wav",         "id":"kitty1"},
     {"src": "110010__tuberatanka__cat-meow-ii.wav", "id":"meow2"},
     {"src": "61259__timtube__cat-meowing.wav",      "id":"meow3"},
@@ -205,7 +206,7 @@
       "music": "water_prelude",
       "mask": "wagon_mask",
       "items": [
-        {"image": "hammer", "value":"245", "x": "217", "y":"96" },
+        {"image": "hammer", "value":"245", "x": "217", "y":"96", "sound":"stone"},
         {"image": "kitten", "value":"255", "x": "212", "y":"144", "sound":"kitty1" }
       ],
       "exits": "wagon_exits",
