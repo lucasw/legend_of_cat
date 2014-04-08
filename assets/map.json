@@ -1,5 +1,5 @@
 {
-  "start_level": "hall0",
+  "start_level": "wagon",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -50,6 +50,10 @@
     {"src": "assets/forest.png",       "id":"forest"},
     {"src": "assets/forest_mask.png",  "id":"forest_mask"},
     {"src": "assets/forest_exits.png", "id":"forest_exits"},
+    
+    {"src": "assets/waterfall.png",       "id":"waterfall"},
+    {"src": "assets/waterfall_mask.png",  "id":"waterfall_mask"},
+    {"src": "assets/waterfall_exits.png", "id":"waterfall_exits"},
     
     {"src": "assets/doungeon.png",       "id":"doungeon"},
     {"src": "assets/doungeon_mask.png",  "id":"doungeon_mask"},
@@ -203,9 +207,28 @@
       "exits": "wagon_exits",
       "connections": [
         {"value": "255", "level": "forest", "x":"212", "y":"16"},
+        {"value": "126", "level": "waterfall", "x":"17", "y":"77"},
         {"value": "182", "level": "waterfall_top", "x":"209", "y":"90"}
       ]
     },
+
+    {
+      "name": "waterfall",
+      "layers": [
+        { "image": "waterfall", "value":"255" }
+      ],
+      "music": "water_prelude",
+      "mask": "waterfall_mask",
+      "items": [
+      ],
+      "exits": "waterfall_exits",
+      "connections": [
+        {"value": "255", "level": "wagon", "x":"295", "y":"142"},
+        {"value": "200", "level": "cave", "x":"209", "y":"102"}
+      ]
+    },
+
+
     { 
       "name": "castle_door",
       "layers" : [
