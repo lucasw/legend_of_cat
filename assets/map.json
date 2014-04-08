@@ -1,5 +1,5 @@
 {
-  "start_level": "wagon",
+  "start_level": "mountain_path",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -80,6 +80,8 @@
     {"src": "assets/castle_hallway_door_right_mask.png","id":"castle_hallway_door_right_mask"},
     {"src": "assets/castle_hallway_door_front.png",     "id":"castle_hallway_door_front"},
     {"src": "assets/castle_hallway_door_front_mask.png","id":"castle_hallway_door_front_mask"},
+    {"src": "assets/castle_hallway_rug1.png","id":"castle_hallway_rug1"},
+    {"src": "assets/castle_hallway_rug1_mask.png","id":"castle_hallway_rug1_mask"},
     
     {"src": "assets/throne.png",     "id":"throne"},
     {"src": "assets/throne_mask.png","id":"throne_mask"},
@@ -288,6 +290,11 @@
       "music": "goblin_king",
       "mask": "castle_hallway_mask", 
       "obstacles": [
+        { 
+         "image": "castle_hallway_rug1",
+         "mask":  "castle_hallway_rug1_mask",
+          "value": "245"
+        }
       ],
       "items": [
       ],
@@ -419,6 +426,11 @@
         { 
          "image": "castle_hallway_door_left",
           "mask" : "castle_hallway_door_left_mask",
+          "value": "245"
+        },
+        { 
+         "image": "castle_hallway_rug1",
+         "mask":  "castle_hallway_rug1_mask",
           "value": "245"
         }
       ],

@@ -281,7 +281,8 @@ function Level(json_data) {
       if ((val_ob !== undefined) && (val_ob !== 128)) {
         val = val_ob;
         console.log(y);
-        console.log("obstacle " + obstacles[i].name + " " + i + " : " 
+        console.log("obstacle " + obstacles[i].name + " " + i + " : "
+            + obstacles[i].json.mask + " " 
             + x + " " + y + ", " + val_ob);
       }
     }
@@ -491,7 +492,8 @@ function Cat(x, y) {
         new_layer.addChild(cont);
         this.level_transition = false;
       } else {
-        console.log("ERROR new layer on " + level.name + " is null " + new_mask_val + " " + cont.x + " " + cont.y);
+        console.log("ERROR new layer on " + level.name + " is null " 
+            + new_mask_val + ", xy " + cont.x + " " + cont.y);
       }
       console.log(mask_val + " " + new_mask_val + ", " + cur_layer + " " + new_layer);
    
