@@ -102,15 +102,15 @@ function Cloud(parent_container, x, y) {
   }
 
 function Item(json_data) {
-  var json = json_data;
+  this.json = json_data;
   
-  this.name = json.image;
+  this.name = this.json.image;
   this.container = new createjs.Container();
   
-  var image = makeBitmap(json.image, false);
+  var image = makeBitmap(this.json.image, false);
   this.container.addChild(image); 
-  this.container.x = json.x; // * scale;
-  this.container.y = json.y; // * scale;
+  this.container.x = this.json.x; // * scale;
+  this.container.y = this.json.y; // * scale;
   image.regX = image.getBounds().width/2;
   image.regY = image.getBounds().height/2;
   //image.scaleX = scale;
@@ -230,6 +230,8 @@ function Level(json_data) {
         var got_item = items[i];
         items.splice(i, 1);
         this.container.removeChild(got_item.container);
+        if (got_item.json.sound !== undefined)
+          var inst = createjs.Sound.play(got_item.json.sound, delay=1500);
         return got_item;
       }
     }

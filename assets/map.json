@@ -1,5 +1,5 @@
 {
-  "start_level": "house_front",
+  "start_level": "wagon",
   "assets_path": "assets/",
   "snd_manifest": [
     {"src": "music/Arcadia.mp3",  "id":"arcadia"},
@@ -20,7 +20,8 @@
     {"src": "assets/cloud.png",       "id":"cloud"},
     
     {"src": "assets/castle_key.png",  "id":"castle_key"},
-    {"src": "assets/hammer.png",  "id":"hammer"},
+    {"src": "assets/hammer.png",      "id":"hammer"},
+    {"src": "assets/kitten.png",      "id":"kitten"},
     
     {"src": "assets/bridge_path_split.png",  "id": "bridge_path_split" },
     {"src": "assets/bridge_path_split_fg.png",  "id": "bridge_path_split_fg" },
@@ -66,6 +67,7 @@
     
     {"src": "assets/throne.png",     "id":"throne"},
     {"src": "assets/throne_mask.png","id":"throne_mask"},
+    {"src": "assets/throne_exits.png","id":"throne_exits"},
 
     {"src": "assets/castle_door_door.png",   "id":"castle_door_door"},
     {"src": "assets/castle_door_door_mask.png",   "id":"castle_door_door_mask"},
@@ -188,7 +190,8 @@
       "music": "water_prelude",
       "mask": "wagon_mask",
       "items": [
-        {"image": "hammer", "value":"245", "x": "217", "y":"96" }
+        {"image": "hammer", "value":"245", "x": "217", "y":"96" },
+        {"image": "kitten", "value":"255", "x": "212", "y":"144", "sound":"kitty1" }
       ],
       "exits": "wagon_exits",
       "connections": [
@@ -294,6 +297,10 @@
           "image": "castle_hallway_door_left_cracked",
           "mask" : "castle_hallway_door_left_mask",
           "key":   "hammer",
+          "x1": "47",
+          "y1": "13",
+          "x2": "88",
+          "y2": "148",
           "sound": "crumbling",
           "value": "245"
         }
@@ -370,6 +377,7 @@
       "obstacles": [
       ],
       "items": [
+        {"image": "kitten", "value":"245", "x": "123", "y":"94" }
       ],
       "exits": "doungeon_exits",
       "connections": [
@@ -390,9 +398,11 @@
       "obstacles": [
       ],
       "items": [
+        {"image": "kitten", "value":"255", "x": "123", "y":"94", "sound":"kitty1" }
       ],
-      "exits": "",
+      "exits": "throne_exits",
       "connections": [
+        {"name": "down",  "value": "255", "level":"hall4", "x":"82", "y":"124"}
       ]
     }
 
