@@ -6,7 +6,11 @@
     {"src": "music/Water Prelude.mp3",  "id":"water_prelude"},
     {"src": "Old Door Creaking-SoundBible.com-1197162460.wav",  "id":"door_creak"},
     {"src": "Crumbling-Mike_Koenig-1123041125.wav", "id":"crumbling"},
-    {"src": "110011__tuberatanka__cat-meow.wav", "id":"meow"}
+    {"src": "203121__npeo__kitty-meow.wav",         "id":"kitty1"},
+    {"src": "110010__tuberatanka__cat-meow-ii.wav", "id":"meow2"},
+    {"src": "61259__timtube__cat-meowing.wav",      "id":"meow3"},
+    {"src": "133869__elethorpia__cat-meowing.wav",  "id":"meow4"},
+    {"src": "110011__tuberatanka__cat-meow.wav",    "id":"meow"}
   ],
   "manifest": [
     {"src": "assets/title.png",       "id":"title"},

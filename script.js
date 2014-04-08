@@ -255,7 +255,7 @@ function Level(json_data) {
         }
       }
     
-    }
+    } // loop through obstacles
 
     if (!used_item) {
       this.container.addChild(item.container); 
@@ -263,6 +263,7 @@ function Level(json_data) {
       item.container.x = x;
       item.container.y = y;
     }
+    return used_item;
   }
   
   this.getMask = function(x,y) {
@@ -391,11 +392,11 @@ function Cat(x, y) {
 
   this.action = function(val) {
     if (val) {
-    console.log("meow");
-    leg1.rotation = 90;
-    if (use_sound)
-      var inst = createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
-      inst.volume = 0.3;
+      console.log("meow");
+      var inst;
+      leg1.rotation = 90;
+      //if (use_sound) {
+      //}
 
       if (item === null) {
         item = level.getItem(cont.x, cont.y);
@@ -404,16 +405,28 @@ function Cat(x, y) {
           item.container.x = -16;
           item.container.y = 16;
           cont.addChild(item.container);
+          inst = createjs.Sound.play("meow2"); //, createjs.Sound.INTERUPT_LATE);
+        } else {
+          inst = createjs.Sound.play("meow"); //, createjs.Sound.INTERUPT_LATE);
         }
       } else {
         cont.removeChild(item.container);
-        level.putItem(item, cont.x + -24 * cont.scaleX, cont.y);
+        var used_item = level.putItem(item, cont.x + -24 * cont.scaleX, cont.y);
         item = null;
+        if (used_item) {
+          inst = createjs.Sound.play("meow3"); //, createjs.Sound.INTERUPT_LATE);
+
+        } else {
+          inst = createjs.Sound.play("meow4"); //, createjs.Sound.INTERUPT_LATE);
+        }
       }
+        
+      inst.volume = 0.3;
     } else {
       if (item === null)
         leg1.rotation = 0;
     }
+    
   }
   
   var cur_layer = null;
