@@ -121,17 +121,17 @@ function Item(json_data) {
 
 // TBD - maybe obstacles should just be items
 function Obstacle(json_data) {
-  var json = json_data;
-  this.name = json.image; 
-  this.key = json.key;
+  this.json = json_data;
+  this.name = this.json.image; 
+  this.key = this.json.key;
+  this.sound = this.json.sound;
   this.container = new createjs.Container();
   this.mask_container = new createjs.Container();
-  this.sound = json.sound;
 
   //console.log("Obstacle " + this.name);
-  var mask = makeBitmap(json.mask, true);
+  var mask = makeBitmap(this.json.mask, true);
   this.mask_container.addChild(mask);
-  var asset = makeBitmap(json.image, true);
+  var asset = makeBitmap(this.json.image, true);
   this.container.addChild(asset);
 
   this.getMask = function(x,y) {
@@ -240,8 +240,8 @@ function Level(json_data) {
     var used_item = false;
     for (var i = 0; i < obstacles.length; i++) {
       var ob = obstacles[i];
-      if ((x > ob.container.x - 10) && (x < ob.container.x + ob.container.getBounds().width) &&
-          (y > ob.container.y - 10) && (y < ob.container.y + ob.container.getBounds().height)) {
+      if ((x >= ob.json.x1) && (x <= ob.json.x2) &&
+          (y >= ob.json.y1) && (y <= ob.json.y2)) {
         if (item.name === ob.key) {
           var layer = this.getLayer(json.obstacles[i].value);
           if (layer !== null) {

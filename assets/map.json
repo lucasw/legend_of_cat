@@ -208,6 +208,10 @@
           "image": "castle_door_door",
           "mask": "castle_door_door_mask",
           "key": "castle_key",
+          "x1": "117",
+          "y1": "0",
+          "x2": "195",
+          "y2": "93",
           "sound": "door_creak",
           "value": "255"
         }
