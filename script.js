@@ -563,13 +563,36 @@ function Cat(x, y) {
   return this;
 }
 
+var progress_rect;
+var progress_bar;
+
 function init() {
   // has to be the same string as canvas id in html
   stage = new createjs.Stage("Legend of Cat");
 
   wd = stage.canvas.width / scale;
   ht = stage.canvas.height / scale;
+  
+  stage.scaleX = scale;
+  stage.scaleY = scale;
 
+  progress_rect = new createjs.Shape();
+  progress_rect.graphics.beginFill("#000000");
+  progress_rect.graphics.drawRect(0, 0, 104, 44);
+  progress_rect.graphics.endFill();
+  progress_rect.x = wd/2 - 52;
+  progress_rect.y = ht/2 - 22;
+  
+  progress_bar = new createjs.Shape();
+  progress_bar.graphics.beginFill("#ffff88");
+  progress_bar.graphics.drawRect(0, 0, 1, 40);
+  progress_bar.graphics.endFill();
+  progress_bar.x = wd/2 - 50;
+  progress_bar.y = ht/2 - 20;
+  stage.addChild(progress_rect);
+  stage.addChild(progress_bar);
+  stage.update();
+  
   var context = stage.canvas.getContext("2d");
   context.imageSmoothingEnabled = false;
   context.mozImageSmoothingEnabled = false;
@@ -607,8 +630,12 @@ function loadMap() {
   map_loader.loadManifest(map_data.manifest);
 }
 
+
 function handleSoundProgress(event) {
-  console.log("loading " + (event ? event.progress : 0));
+  //console.log("loading " + (event ? event.progress : 0));
+  if (event) 
+    progress_bar.scaleX = 100 * event.progress;
+  stage.update();
 }
 
 function loadMusic() {
@@ -620,9 +647,10 @@ function loadMusic() {
 
   createjs.Sound.alternateExtensions = ["mp3"];
 
+
   snd_loader = new createjs.LoadQueue(true, map_data.assets_path); 
   snd_loader.installPlugin(createjs.Sound);
-  //snd_loader.addEventListener("progress", handleSoundProgress);
+  snd_loader.addEventListener("progress", handleSoundProgress);
   snd_loader.addEventListener("complete", soundHandleComplete);
   snd_loader.loadManifest(map_data.snd_manifest);
 }
@@ -656,6 +684,8 @@ function manageMusic() {
 }
 
 function mapHandleComplete() {
+  stage.removeChild(progress_bar);
+  stage.removeChild(progress_rect);
   // create all the levels
   for (var i = 0; i < map_data.levels.length; i++) {
     var new_level = new Level(
@@ -670,8 +700,6 @@ function mapHandleComplete() {
 
   //level = levels[0];
   stage.addChild(level.container);
-  stage.scaleX = scale;
-  stage.scaleY = scale;
 
   cat = new Cat(wd/2, 3.7*ht/4);
   cat.update();
