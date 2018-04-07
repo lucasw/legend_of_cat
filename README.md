@@ -19,4 +19,6 @@ Draw with pencil in gimp, fill in areas with distinct solid colors, select by co
 
 convert level_test.png -dither FloydSteinberg -colors 16 level_test_dither.png
 
+http://www.imagemagick.org/Usage/quantize/
+
 For the areas that can be walked around, create a mask image where white is walkable and black is not.  In a second mask image certain colors will be keyed to connect to other screens- walking to a certain shade of green on the mask will look in a map for that shade of green for the level to load.
